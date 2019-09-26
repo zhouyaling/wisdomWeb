@@ -17,18 +17,19 @@ axios.interceptors.request.use(
         }
 
         // 添加token到headers
-        const token = localStorage.getItem("cc_token");
+        /* const token = localStorage.getItem("cc_token");
         if (token) {
             config.headers.token = token
         }
+        */
 
         // 鉴权参数设置
-        if (config.method === 'get') {
-            //get请求下 参数在params中，其他请求在data中
-            config.params = config.params || {};
-        } else {
-            config.data = config.data || {};
-        }
+        /*  if (config.method === 'get') {
+             //get请求下 参数在params中，其他请求在data中
+             config.params = config.params || {};
+         } else {
+             config.data = config.data || {};
+         } */
 
         return config;
     },
@@ -41,7 +42,7 @@ axios.interceptors.request.use(
 axios.interceptors.response.use(
     response => {
         // 同一code的返回处理
-        if (response.data.code === 500) {}
+        //if (response.data.code === 500) {}
 
         return response;
     },
@@ -61,10 +62,12 @@ axios.interceptors.response.use(
 
 export function get(url, params = {}) {
     return new Promise((resolve, reject) => {
-        axios.get(url, params)
+        var data = { params: params };
+        axios.get(url, data)
             .then(response => {
-                if (response.data.code == 200) {
-                    resolve(response.data.data);
+                console.log("response:", response);
+                if (response.status == 200) {
+                    resolve(response.data);
                 } else {
                     // 错误处理
                 }
@@ -83,16 +86,19 @@ export function get(url, params = {}) {
  */
 
 export function post(url, data = {}) {
-    axios.post(url, data)
-        .then(response => {
-            if (response.data.code == 200) {
-                resolve(response.data.data);
-            } else {
-                // 错误处理
-            }
-        }, err => {
-            reject(err);
-        });
+    return new Promise((resolve, reject) => {
+        axios.post(url, data)
+            .then(response => {
+                if (response.data.code == 200) {
+                    resolve(response.data.data);
+                } else {
+                    // 错误处理
+                }
+            }, err => {
+                reject(err);
+            });
+    });
+
 };
 
 /**

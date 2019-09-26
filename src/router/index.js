@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import PageAlarm from '@/page/alarm'
 import PageCar from '@/page/car'
-import PagePath from '@/page/path'
+import PageWay from '@/page/way'
 
 Vue.use(Router)
 
@@ -11,8 +11,8 @@ export default new Router({
     //base: '/', //这个配置很重要，否则会出现打包页面空白情况
     routes: [{
         path: '/',
-        name: 'path',
-        component: PagePath
+        name: 'alarm',
+        component: PageAlarm
     }, {
         path: '/alarm',
         name: 'alarm',
@@ -22,8 +22,8 @@ export default new Router({
         name: 'car',
         component: PageCar
     }, {
-        path: '/path',
-        name: 'path',
-        component: PagePath
+        path: '/way',
+        name: 'way',
+        component: PageWay
     }]
 })

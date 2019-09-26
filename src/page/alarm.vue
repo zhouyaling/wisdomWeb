@@ -5,7 +5,7 @@
           <div class="module-left">
               <!-- 监控画面 -->
               <div class="video-box">
-                    <div class="circle-box">
+                    <!-- <div class="circle-box">
                         <img src="@/assets/imgs/circle1.png" alt="">
                         <img src="@/assets/imgs/circle2.png" alt="">
                         <img src="@/assets/imgs/icon-line1.png" alt="">
@@ -14,12 +14,12 @@
                             <span>危险区域监控画面</span>
                             <span class=""></span>
                         </div>
-                    </div>
+                    </div> -->
               </div>
               <!-- 历史报警详情 -->
               <div class="alarm-box">
                   <title-bar title = "历史报警详情" subText = "ALARM INFORMATION"></title-bar>
-                  <alarm-detail info="alramInfo"></alarm-detail>
+                  <alarm-detail :info="alramInfo"></alarm-detail>
               </div>
               
           </div>
@@ -28,26 +28,24 @@
                   <title-bar title = "历史危险区域报警信息" subText = "ALARM INFORMATION FOR DANGEROUS AREAS"></title-bar>
                   <div class="alarm-list-box" >
                      <div class="alarm-list" v-bind:class="resetAnimation?'reset-animation':''" :style="{top}">
-                         <div class="alarm-item" v-for="(item,index) in listData" :key="index">
+                         <div class="alarm-item" v-for="(item,index) in listData" :key="index" @click="showDatail(item)">
                              <div>
                                  <div class="header-box">
-                                     <!-- <img src="@/assets/imgs/header-z.png" alt=""/> -->
-                                     <img  src="@/assets/imgs/header-default.png" alt="">
+                                     <img  v-bind:src="item.image" alt="">
                                  </div>
                              </div>
-                             <div>2019/08/08</div>
-                             <div>07 : 32 : 54</div>
-                             <div @click="alarmPanel(1)">A区5栋园林通道{{index}}</div>
+                             <div>{{item.time | splitDate}}</div>
+                             <div>{{item.time | splitTime}}</div>
+                             <div>A区5栋园林通道{{index}}</div>
                          </div>
-                         <div class="alarm-item" v-for="(item,index) in listData" :key="index+111" >
+                         <div class="alarm-item" v-for="(item,index) in listData" :key="index+111" @click="showDatail(item)">
                              <div>
                                  <div class="header-box">
-                                     <!-- <img src="@/assets/imgs/header-z.png" alt=""/> -->
-                                     <img  src="@/assets/imgs/header-default.png" alt="">
+                                     <img  v-bind:src="item.image" alt="">
                                  </div>
                              </div>
-                             <div>2019/08/08</div>
-                             <div>07 : 32 : 54</div>
+                             <div>{{item.time | splitDate}}</div>
+                             <div>{{item.time | splitTime}}</div>
                              <div>A区5栋园林通道{{index}}</div>
                          </div>
                      </div>
@@ -55,15 +53,15 @@
           </div>
         </div> 
         <!-- 报警详情弹窗 -->
-        <div class="panel" v-show="showPanel" slot="panel">
+        <!-- <div class="panel" v-show="showPanel" slot="panel">
             <div class="modal alarm-modal">
                  <title-bar icon="true" title = "报警详情" subText = "ALARM INFORMATION"></title-bar>
-                <alarm-detail info="alramInfo" style="height:64%;"></alarm-detail>
+                <alarm-detail :info="alramInfo" style="height:64%;"></alarm-detail>
                 <div class="btn-close" @click="closePanel()">关闭窗口</div>
             </div>
-        </div>
+        </div> -->
         <!-- 报警头像详情弹窗 -->
-        <div class="panel" v-show="showHeaderPanel" slot="panel" ref="header-panel">
+       <!--  <div class="panel" v-show="showHeaderPanel" slot="panel" ref="header-panel">
             <div class="modal header-modal" ref="header-modal">
                 <div class="header-big-box">
                 </div>
@@ -75,10 +73,12 @@
                     <p>A区5栋园林通道</p>
                 </div>
             </div>
-        </div>
+        </div> -->
       </index-layout>
 </template>
 <script>
+import _axios from "axios";
+
 import IndexLayout from "@/components/IndexLayout.vue";
 import TitleBar from "@/components/TitleBar.vue";
 import AlarmDetail from "@/components/AlarmDetail.vue";
@@ -94,6 +94,7 @@ export default {
   },
   data() {
     return {
+      alramInfo: {}, // 报警详情
       listData: [], //报警信息列表数据
       activeIndex: 0, // 当前滚动数据
       resetAnimation: false, // 重置滚动列表
@@ -102,13 +103,20 @@ export default {
       showBlur: false // 高斯模糊
     };
   },
+  filters: {
+    splitDate(val) {
+      return val && val.split(" ")[0] ? val.split(" ")[0] : "";
+    },
+    splitTime(val) {
+      return val && val.split(" ")[0] ? val.split(" ")[1] : "";
+    }
+  },
   computed: {
     top() {
       return -this.activeIndex * 131 + "px";
     }
   },
   mounted() {
-    this.getTest();
     this.getListData();
   },
   methods: {
@@ -127,10 +135,34 @@ export default {
       this.showPanel = true;
       this.showBlur = true;
     },
+
+    // 详情
+    showDatail(item) {
+      this.alramInfo = item;
+    },
+
     // 获取历史列表
     getListData() {
-      this.listData = [1, 2, 3, 4, 5, 6];
-      //this.ScrollUp2();
+      var _this = this;
+      _this.listData = [];
+      var data = { camera: 1, count: 1 };
+      this.$api.queryDangerousList(data).then(result => {
+        console.log("历史区域报警列表：", result);
+        _this.listData = result;
+        if (_this.listData.length > 0) {
+          _this.alramInfo = _this.listData[0];
+        }
+        _this.ScrollUp2();
+      });
+
+      /*   _axios
+        .get(
+          "http://10.15.208.119/api/Face/GetDangerousPedestrianRealtime?camera=1&count=1"
+        )
+        .then(response => {
+          console.log("tttttttttttttt", response);
+        })
+        .catch(function(error) {}); */
     },
 
     // 向上滚动
@@ -144,20 +176,17 @@ export default {
           _this.resetAnimation = true;
           _this.activeIndex = 0;
         }
-      }, 5000);
-    },
-
-    getTest() {
-      /*  const data = qs.stringify({
-        username: "developer",
-        password: "JKWYKFB",
-        clientsystem: "win7",
-        clientscreensize: "1920,1080",
-        clientbrowser: "chrome"
-      }); */
-
-      this.$api.getTest({}).then(result => {});
+      }, 8000);
     }
+    /*  getTest() {
+      const data = qs.stringify({
+        camera: "1",
+        count: "2"
+      });
+
+      this.$api.getTest(data).then(result => {
+      });
+    } */
   }
 };
 </script>
@@ -178,10 +207,10 @@ export default {
 .video-box {
   width: 100%;
   height: 55%;
-  background-image: url(../assets/imgs/video-box.png);
+  /* background-image: url(../assets/imgs/video-box.png);
   background-repeat: no-repeat;
   background-size: 100% 100%;
-  background-position: center;
+  background-position: center; */
 }
 
 .video-box-text {
@@ -196,13 +225,13 @@ export default {
 
 .video-box-text > span:nth-of-type(2) {
   display: inline-block;
-    width: 17.9rem;
-    height: 0.8rem;
-    position: absolute;
-    bottom: -0.1rem;
-    left: -0.5rem;
-    z-index: -1;
-    background: rgba(0,157,255,0.27);
+  width: 17.9rem;
+  height: 0.8rem;
+  position: absolute;
+  bottom: -0.1rem;
+  left: -0.5rem;
+  z-index: -1;
+  background: rgba(0, 157, 255, 0.27);
 }
 
 .alarm-box {
@@ -295,11 +324,19 @@ export default {
   text-align: center;
   font-family: Acens;
   font-size: 1.8rem;
-  color: #FBFDFF;
+  color: #fbfdff;
 }
 
 .alarm-item > div:nth-of-type(1) {
   width: 18%;
+}
+
+.alarm-item > div:nth-of-type(2) {
+  letter-spacing: 0.2rem;
+}
+
+.alarm-item > div:nth-of-type(3) {
+  letter-spacing: 0.2rem;
 }
 
 .alarm-item .header-box {
@@ -323,11 +360,11 @@ export default {
 }
 
 .alarm-item .header-box img:nth-of-type(1) {
-  width: 6.9rem;
-  height: 6.9rem;
-  left: 1.4rem;
-  top: 0.6rem;
-  border-radius: 0.6rem;
+  width: 7.1rem;
+  height: 7.1rem;
+  left: 1.25rem;
+  top: 0.65rem;
+  border-radius: 0.7rem;
   z-index: 1;
 }
 
@@ -386,8 +423,8 @@ export default {
 .header-modal {
   width: 28%;
   height: 46%;
-  background-image: url(../assets/imgs/header-box-large.png);
-  background-size: 100% 100%;
+ /*  background-image: url(../assets/imgs/header-box-large.png);
+  background-size: 100% 100%; */
   position: relative;
 }
 

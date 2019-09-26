@@ -1,7 +1,7 @@
 <template>
     <div class="alarm-info-box">
-        <div class="alarm-video">
-            
+        <div class="alarm-img">
+            <img v-bind:src="info.image?info.image:''" alt="">
         </div>
         <div class="alarm-info">
             <div>
@@ -18,7 +18,7 @@
             </div>
             <div>
                 <span>报警时间:</span>
-                <span style="white-space:normal;">2019/08/08 07:33:25</span>
+                <span style="white-space:normal;">{{info.time}}</span>
             </div>
         </div>
     </div>
@@ -26,7 +26,15 @@
 <script>
 export default {
   name: "AlarmDetail",
-  props: ["info"]
+  props: {
+    info:{
+      type:Object,
+      default:{
+        img:"",
+        time:""
+      }
+    }
+  }
 };
 </script>
 <style scoped>
@@ -40,11 +48,16 @@ export default {
   justify-content: center;
 }
 
-.alarm-video {
+.alarm-img {
   width: 58%;
   height: 83.5%;
   background-color: #192741;
   float: left;
+}
+
+.alarm-img img{
+  width: 100%;
+  height: 100%;
 }
 
 .alarm-info {

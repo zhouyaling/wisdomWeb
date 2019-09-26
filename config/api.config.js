@@ -4,5 +4,5 @@ console.log(isPro);
 
 module.exports = {
     // baseUrl: isPro ? 'https://www.***/index.php/Official（线上地址）' : '/api' // 处理跨域
-    baseUrl: "https://digital.tq-service.com/tqdata"
+    baseUrl: "http://10.15.208.119" //"https://digital.tq-service.com/tqdata"
 }

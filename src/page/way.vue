@@ -5,19 +5,19 @@
                 <title-bar title="抓拍截图" subText="SNAPSHOT"></title-bar>
                 <div class="module-left">
                   <div class="big-img-box">
-                    <img src="@/assets/imgs/img.png" alt="">
+                    <img v-bind:src="currentData.image" alt="">
                   </div>
                   <div class="card-box detail-info">
                       <div>
-                        <header-box></header-box>
-                        <div class="detail-time">07 : 32 : 54</div>
+                        <header-box :img="currentData.image"></header-box>
+                        <div class="detail-time">{{currentData.time | splitTime}}</div>
                       </div>
                       <div>
                         <p class="detail-item">
-                          <span>年龄</span><span>10 - 18</span>
+                          <span>年龄</span><span>{{ageGroup[currentData.age]}}</span>
                           </p>
-                        <p class="detail-item"><span>性别</span><span>女</span></p>
-                        <p class="detail-item"><span>眼镜</span><span>无</span></p>
+                        <p class="detail-item"><span>性别</span><span>{{currentData.gender | splitGender}}</span></p>
+                        <p class="detail-item"><span>眼镜</span><span>{{currentData.glass | splitGlass}}</span></p>
                       </div>
                   </div>
                   <div class="card-box list-box">
@@ -26,11 +26,11 @@
                           <span>CAPTURING VISITORS</span>
                       </div>
                       <ul class="list">
-                            <li v-for="(item,index) in listData" :key="index">
+                            <li v-for="(item,index) in listData" :key="index" v-if="index<3" @click="showPath(item)">
                                 <div class="list-item">
-                                    <div><small-header-box></small-header-box></div>
+                                    <div><small-header-box :img="item.image"></small-header-box></div>
                                     <div>进入时间</div>
-                                    <div>07 : 32 : 54</div>
+                                    <div>{{item.time | splitTime}}</div>
                                 </div>
                             </li>
                       </ul>
@@ -39,7 +39,7 @@
               </div>
               <div class="col-75">
                 <div class="card-box map-box">
-                  <area-module></area-module>
+                  <area-module :way="wayList"></area-module>
                 </div>
                 <div class="info-box">
                     <div class="people-info">
@@ -53,7 +53,7 @@
                            <img src="@/assets/imgs/b-circle4.png" alt="">
                            <img src="@/assets/imgs/b-circle5.png" alt="">
                            <div class="circle-text">
-                             <p>5000</p>
+                             <p>{{sexData.male + sexData.female}}</p>
                              <p>人员总来访量</p>
                            </div>
                          </div>
@@ -62,17 +62,17 @@
                          <div  class="count-title">男性人数</div>
                          <div class="count-sub-title">NUMBER OF MALES</div>
                          <div class="count-box">
-                           <span>3403</span>人
+                           <span>{{sexData.male}}</span>人
                          </div>
                          <div  class="count-title">女性人数</div>
                          <div class="count-sub-title">NUMBER OF WOMEN</div>
                          <div class="count-box">
-                           <span>3403</span>人
+                           <span>{{sexData.female}}</span>人
                          </div>
                        </div>
                        <div class="card-box pie-boxs">
                             <div class="pie-box" v-for="(item,index) in listAgeGroup" :key="index">
-                                <div>{{item.name}}</div>
+                                <div>{{item.age}}</div>
                                 <div :id="'myChart' + (index+1)" class="pie-s-chart"></div>
                             </div>
                        </div>
@@ -92,7 +92,7 @@ import SmallHeaderBox from "@/components/SmallHeaderBox.vue";
 import AreaModule from "./part/areaModule.vue";
 
 export default {
-  name: "path",
+  name: "way",
   components: {
     IndexLayout,
     TitleBar,
@@ -102,36 +102,129 @@ export default {
   },
   data() {
     return {
-      listData: [1, 2, 3],
-      listAgeGroup: [
-        {
-          name: "青年",
-          avg: 25
-        },
-        {
-          name: "少年",
-          avg: 10
-        },
-        {
-          name: "中年",
-          avg: 25
-        },
-        {
-          name: "老年",
-          avg: 40
-        }
+      wayList: [],
+      currentData: {},
+      sexData: { male: 0, female: 0 },
+      listData: [],
+      listAgeGroup: [],
+      startDate: "",
+      endDate: "",
+      ageGroup: [
+        "婴幼儿",
+        "儿童",
+        "少年",
+        "青少年",
+        "青年",
+        "壮年",
+        "中年",
+        "中老年",
+        "老年"
       ]
     };
   },
+  filters: {
+    splitGender(val) {
+      return val == "1" ? "男" : "女";
+    },
+    splitGlass(val) {
+      return val == "1" ? "有" : "无";
+    },
+    splitTime(val) {
+      return val && val.split(" ")[0] ? val.split(" ")[1] : "";
+    }
+  },
   mounted() {
     let _this = this;
-    setTimeout(function() {
-      _this.listAgeGroup.forEach((element, index) => {
-        _this.drawPie(element.name, element.avg, index + 1);
-      });
-    }, 1000);
+    _this.initDateTime();
+    var obj = {
+      dt1: this.startDate,
+      dt2: this.endDate
+    };
+
+    _this.getPedestriantype(obj);
+    _this.getPedestrianCount();
+    _this.getPedestrianRealtime();
   },
   methods: {
+    // 获取时间
+    initDateTime() {
+      let dateNow = new Date();
+      this.startDate = `${dateNow.getFullYear()}-${dateNow.getMonth() +
+        1}-${dateNow.getDate()} 00:00:00`;
+      this.endDate = `${dateNow.getFullYear()}-${dateNow.getMonth() +
+        1}-${dateNow.getDate()} 23:59:59`;
+    },
+
+    // 获取来访人员类型
+    getPedestriantype(obj) {
+      var _this = this;
+      var obj1 = { ...obj, count: 5 };
+      _this.$api.queryPedestrianType(obj1).then(result => {
+        console.log("来访人员类型", result);
+        var cacheData = [];
+        result.forEach((element, index) => {
+          cacheData.push({
+            age: this.ageGroup[element.age - 1],
+            Percentage:
+              element.Percentage.indexOf("%") > -1
+                ? element.Percentage.replace("%", "")
+                : ""
+          });
+        });
+        this.listAgeGroup = cacheData;
+
+        setTimeout(function() {
+          _this.listAgeGroup.forEach((element, index) => {
+            _this.drawPie(element.age, element.Percentage, index + 1);
+          });
+        }, 1000);
+      });
+    },
+
+    // 获取来访人员总数
+    getPedestrianCount(obj) {
+      var obj1 = { camera: 1 };
+      this.$api.queryPedestrianCount(obj1).then(result => {
+        console.log("来访人员人数", result);
+        result.forEach(element => {
+          if (element.gender == 1) {
+            this.sexData.male = element.num;
+          } else if (element.gender == 2) {
+            this.sexData.female = element.num;
+          }
+        });
+      });
+    },
+
+    // 来访人员最近列表记录
+    getPedestrianRealtime() {
+      var obj1 = { count: 5 };
+      var _this = this;
+      _this.$api.queryPedestrianRealtime(obj1).then(result => {
+        console.log("来访人员列表", result);
+        _this.listData = result;
+        if (_this.listData.length > 0) {
+          _this.currentData = _this.listData[0];
+          _this.getUserList({ user: _this.currentData.user_id });
+        }
+      });
+    },
+
+    // 展示动线
+    showPath(item) {
+      this.currentData = item;
+      this.getUserList({ user: this.currentData.user_id });
+    },
+
+    // 查询动线
+    getUserList(obj) {
+      var _this = this;
+      _this.$api.queryUserList(obj).then(result => {
+        console.log("获取人员动线", result);
+        _this.wayList = result;
+      });
+    },
+
     // 画环形图
     drawPie(name, val, index) {
       let myChart = this.$echarts.init(
@@ -212,9 +305,10 @@ export default {
                     show: true,
                     position: "center",
                     formatter: function(data) {
-                      return `${data.data.value.toFixed(0)}%\n${data.name}`;
+                      return `${data.data.value}%`;
+                      // return `${data.data.value.toFixed(0)}%\n${data.name}`;
                     },
-                    fontSize: 14,
+                    fontSize: 12,
                     fontFamily: "Acens",
                     /*  lineHeight: 25, */
                     color: "#FFFFFF",
@@ -232,7 +326,7 @@ export default {
       });
     },
     test() {
-      ConsoleWrite();
+      ConsoleWrite(JSON.stringify({ name: "aaa", number: "1" }));
     }
   }
 };
@@ -259,10 +353,10 @@ export default {
 }
 
 .big-img-box {
-  /* width: 100%; */
-  height: 21rem;
-  margin: 0px 5% 0 5%;
+  height: 22.5rem;
+  margin: 0px 1% 0 1%;
   position: relative;
+  -webkit-box-sizing: border-box;
   box-sizing: border-box;
 }
 
@@ -270,7 +364,7 @@ export default {
   content: "";
   width: 100%;
   height: 100%;
-  background: url(../assets/imgs/video-box.png) no-repeat center;
+  background: url(../assets/imgs/small-video-box.png) no-repeat center;
   background-size: 100% auto;
   position: absolute;
   top: 0;
@@ -278,9 +372,9 @@ export default {
 }
 
 .big-img-box img {
-  width: 90%;
-  height: 90%;
-  margin: 5% auto auto 5%;
+  width: 88%;
+  height: 81%;
+  margin: 5.2% auto auto 5.8%;
 }
 
 .card-box {
@@ -314,6 +408,7 @@ export default {
   font-size: 1.2rem;
   color: #ffffff;
   margin-top: 1.5rem;
+  letter-spacing: 0.2rem;
 }
 
 .detail-item {
@@ -323,8 +418,8 @@ export default {
 }
 
 .detail-item > span:nth-of-type(2) {
-  font-family: Acens;
-  font-size: 2.4rem;
+ /*  font-family: Acens; */
+  font-size: 2.2rem;
   color: #009eff;
   display: inline-block;
 }
@@ -401,7 +496,7 @@ export default {
   font-family: Acens;
   font-size: 1.8rem;
   color: #009eff;
-  letter-spacing: 0;
+  letter-spacing: 0.2rem;
 }
 
 .map-box {
@@ -482,9 +577,6 @@ export default {
   width: 20rem;
   height: 20rem;
   position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   margin-left: 13%;
   margin-top: 10%;
 }
@@ -511,11 +603,13 @@ export default {
 
 .circle-box img {
   position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .circle-box img:nth-of-type(1) {
-  top: -5px;
-  left: -4px;
+  transform: translate(-51%, -52%);
 }
 
 .circle-box img:nth-of-type(2) {
@@ -532,21 +626,21 @@ export default {
 
 @keyframes roate1 {
   0% {
-    transform: rotate(0deg);
+    transform: translate(-50%, -50%) rotate(0deg);
   }
 
   100% {
-    transform: rotate(-360deg);
+    transform: translate(-50%, -50%) rotate(-360deg);
   }
 }
 
 @keyframes roate2 {
   0% {
-    transform: rotate(0deg);
+    transform: translate(-50%, -50%) rotate(0deg);
   }
 
   100% {
-    transform: rotate(360deg);
+    transform: translate(-50%, -50%) rotate(360deg);
   }
 }
 
@@ -580,7 +674,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 0.8rem;
+  margin-top: 1.2rem;
 }
 
 .pie-s-chart {

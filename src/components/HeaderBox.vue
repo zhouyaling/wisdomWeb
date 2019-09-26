@@ -1,6 +1,6 @@
 <template>
     <div class="header-box">
-        <img  src="@/assets/imgs/header-default.png" alt="">
+        <img  v-bind:src="img" alt="">
     </div>
 </template>
 <script>
