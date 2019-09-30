@@ -1,7 +1,7 @@
 <template>
     <index-layout>
             <div slot="main"  class="main" >
-              <div class="title">a</div>
+              <div class="title"></div>
               <div class="col-25">
                   <title-bar title="车辆品牌" subText="VEHICLE BRAND"></title-bar>
                   <div class="card-box">
@@ -9,13 +9,14 @@
                             <div class="box-img" v-for="(item,index) in brandList" v-if="index<5" :key="index">
                                 <span>{{item.Percentage | FliterNumber}}<span class="percent-unit"></span></span>
                                 <span>{{item.carBrands}}</span>
+                                <div class="light"></div>
                             </div>
                     </div>
                   </div>
                     <title-bar title="车型" subText="VEHICLE TYPE"></title-bar>
                   <div class="card-box" >
                     <div class="car-type-box" >
-                        <div> <pie-chart :info="carTypeList"></pie-chart></div>
+                        <div> <pie-chart :data="carTypeList"></pie-chart></div>
                         <div class="pie-ledge">
                                 <dl class="pie-ledge-item" v-for="(item,index) in carTypeList" v-if="index<5" :key="index">
                                     <dt></dt>
@@ -28,13 +29,32 @@
                     </div>
                   </div>
                     <title-bar title="车身颜色" subText="BODY COLOR"></title-bar>
-                  <div class="card-box">
-                    <div class="car-color-box">
-                          <div class="table-item" v-for="(item,index) in carColorList" :key="index">
+                  <div class="card-box" style="max-height:20rem;overflow:hidden">
+                    <div class="car-color-box car-color-box1" >
+                      <div v-bind:class="resetColorAnimation?'reset-animation':''" :style="`top:${ctop}`">
+                        <div class="table-item"  v-for="(item,index) in carColorList" :key="index">
+                         <span>{{item.carColor}}</span>
+                              <div class="line-box">
+                                <div class="progress" v-bind:style="`width:${item.Percentage.replace('%','')}%`"></div>
+                              </div>
+                              <span>{{item.Percentage}}</span>
+                              <span>--辆</span>
+                      </div>
+                      <div class="table-item"  v-for="(item,index) in carColorList" :key="index+111">
+                         <span>{{item.carColor}}</span>
+                              <div class="line-box">
+                                <div class="progress" v-bind:style="`width:${item.Percentage.replace('%','')}%`"></div>
+                              </div>
+                              <span>{{item.Percentage}}</span>
+                              <span>--辆</span>
+                      </div>
+                      </div>
+                      
+                         <!--  <div class="table-item" v-for="(item,index) in carColorList" :key="index">
                               <span>{{item.carColor}}</span>
                               <span>{{item.Percentage}}</span>
                               <span>--辆</span>
-                          </div>
+                          </div> -->
                     </div>
                   </div>
                 </div>
@@ -55,13 +75,21 @@
                                     <span>出入场时间</span>
                                     <span>状态</span>
                                 </div>
-                                <div class="info-detail-box">
-                                    <div class="info-detail-item" v-for="(item,index) in carInfoList" :key="index">
-                                    <span>{{item.carNum}}</span>
-                                    <span>--</span>
-                                    <span>{{item.time}}</span>
-                                    <span>{{item.InOut==1?"正常出场":"正常入场"}}</span>
-                                </div>
+                                <div class="info-detail-box" >
+                                    <div class="list-box" v-bind:class="resetAnimation?'reset-animation':''" :style="{top}">
+                                      <div class="info-detail-item" v-for="(item,index) in carInfoList" :key="index">
+                                        <span>{{item.carNum}}</span>
+                                          <span>--</span>
+                                          <span>{{item.time}}</span>
+                                          <span>{{item.InOut==1?"正常出场":"正常入场"}}</span>
+                                      </div>
+                                      <div class="info-detail-item" v-for="(item,index) in carInfoList" :key="index+111">
+                                          <span>{{item.carNum}}</span>
+                                          <span>--</span>
+                                          <span>{{item.time}}</span>
+                                          <span>{{item.InOut==1?"正常出场":"正常入场"}}</span>
+                                      </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -180,12 +208,25 @@ export default {
         }
       ],
       startDate: "",
-      endDate: ""
+      endDate: "",
+      resetAnimation: false,
+      activeIndex: 0,
+
+      resetColorAnimation: false,
+      activeColorIndex: 0
     };
   },
   filters: {
     FliterNumber(val) {
       return val ? val.substring(0, 3) : 0;
+    }
+  },
+  computed: {
+    top() {
+      return -this.activeIndex * 5.1 + "rem";
+    },
+    ctop() {
+      return -this.activeColorIndex * 4 + "rem";
     }
   },
   mounted() {
@@ -202,6 +243,7 @@ export default {
     this.getCarSUMbyHou();
     this.getCarSUMbyDay();
   },
+
   methods: {
     // 获取时间
     initDateTime() {
@@ -229,17 +271,19 @@ export default {
     },
     // 车辆颜色
     getCarColor(obj) {
-      var obj1 = { ...obj, count: 4 };
+      var obj1 = { ...obj, count: 10 };
       this.$api.queryCarColor(obj1).then(result => {
         console.log("车辆颜色", result);
         this.carColorList = result;
+        this.ScrollUp2Color();
       });
     },
     // 车辆进出记录
     getCarListRealtime() {
-      this.$api.queryCarListRealtime({ count: 3 }).then(result => {
+      this.$api.queryCarListRealtime({ count: 5 }).then(result => {
         console.log("车辆进出记录", result);
         this.carInfoList = result;
+        this.ScrollUp2();
       });
     },
 
@@ -277,6 +321,34 @@ export default {
         this.monthCarInfoXData = xData;
         this.monthCarInfoYData = yData;
       });
+    },
+
+    // 向上滚动
+    ScrollUp2() {
+      let _this = this;
+      window.setInterval(function() {
+        _this.resetAnimation = false;
+        if (_this.activeIndex < _this.carInfoList.length) {
+          _this.activeIndex += 1;
+        } else {
+          _this.resetAnimation = true;
+          _this.activeIndex = 0;
+        }
+      }, 5000);
+    },
+
+    // 向上滚动
+    ScrollUp2Color() {
+      let _this = this;
+      window.setInterval(function() {
+        _this.resetColorAnimation = false;
+        if (_this.activeColorIndex < _this.carColorList.length) {
+          _this.activeColorIndex += 1;
+        } else {
+          _this.resetColorAnimation = true;
+          _this.activeColorIndex = 0;
+        }
+      }, 5000);
     }
   }
 };
@@ -326,6 +398,66 @@ export default {
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  overflow: hidden;
+}
+
+.big-img-box .box-img:nth-of-type(1) {
+  animation: opc1 1s linear 0.4s alternate infinite;
+}
+
+.big-img-box .box-img:nth-of-type(2) {
+  animation: opc1 1s linear 0.6s alternate infinite;
+}
+
+.big-img-box .box-img:nth-of-type(3) {
+  animation: opc1 1s linear 0.7s alternate infinite;
+}
+
+.big-img-box .box-img:nth-of-type(4) {
+  animation: opc1 1s linear 0.4s alternate infinite;
+}
+
+.big-img-box .box-img:nth-of-type(5) {
+  animation: opc1 1s linear 0.6s alternate infinite;
+}
+
+@keyframes opc1 {
+  0% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0.6;
+  }
+}
+
+/* .box-img .light {
+  content: "";
+  position: absolute;
+  top: 0;
+  height: 9.5rem;
+  width: 10.5rem;
+  z-index: 1;
+  left: -30%;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0),
+    rgba(255, 255, 255, 0.03) 60%,
+    rgba(255, 255, 255, 0.01) 80%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  
+  transform: skewX(-30deg);
+  animation: left 1.5s ease-in-out alternate;
+} */
+
+@keyframes left {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 200%;
+  }
 }
 
 .box-img > span:nth-of-type(1) {
@@ -483,12 +615,16 @@ export default {
 }
 
 .table-item > span {
-  min-width: 33%;
-  display: block;
-  font-family: PingFang-Regular;
-  font-size: 1.6rem;
+  min-width: 13%;
+  display: inline-block;
+  font-family: din;
+  font-size: 1.4rem;
   color: #ffffff;
   text-align: center;
+}
+
+.table-item > span:nth-of-type(3) {
+  margin-left: 0.9rem;
 }
 
 .other-box {
@@ -549,7 +685,7 @@ export default {
   position: relative;
 }
 
-.picture-item:nth-of-type(2)::before{
+.picture-item:nth-of-type(2)::before {
   width: 100%;
   height: 100%;
   content: "";
@@ -587,6 +723,20 @@ export default {
 .info-detail-box {
   height: 16rem;
   background: rgba(31, 40, 57, 0.39);
+  overflow: hidden;
+}
+
+.info-detail-box .list-box {
+  width: 100%;
+  height: 16rem;
+  position: relative;
+  transition: top 0.7s;
+  -webkit-transition: top 0.7s;
+}
+
+.reset-animation {
+  transform: top 0s !important;
+  -webkit-transition: top 0s !important;
 }
 
 .info-detail-item {
@@ -616,14 +766,53 @@ export default {
   line-height: 1.5rem;
 }
 
-.title{
+.title {
   position: absolute;
-  top: -11.5rem;
+  top: -10rem;
   left: 0;
   width: 100%;
-  height:6.6rem ;
+  height: 6.6rem;
   background: url(../assets/imgs/car-title.png) no-repeat center;
   background-size: auto 95%;
+}
+
+.car-info-box {
+  position: relative;
+  animation: all 1s;
+}
+
+.car-color-box1 {
+  height: 16rem;
+  overflow: hidden;
+}
+
+.car-color-box1 > div {
+  position: relative;
+}
+
+.line-box {
+  width: 16.9rem;
+  height: 0.9rem;
+  background: rgba(8, 96, 156, 0.25);
+  position: relative;
+  display: inline-block;
+  float: left;
+  margin: 0 1.7rem;
+}
+
+.line-box .progress {
+  width: 0%;
+  height: 0.9rem;
+  background: #08609c;
+  top: 0;
+  left: 0;
+  animation: move-tip 1.2s ease-out 1;
+}
+
+@keyframes move-tip {
+  0% {
+    width: 0;
+  }
 }
 </style>
 

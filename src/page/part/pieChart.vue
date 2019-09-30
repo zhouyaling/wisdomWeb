@@ -4,11 +4,30 @@
 <script>
 export default {
   name: "pieChart",
+  props: ["data"],
   data() {
     return {
       color: ["#0148E3", "#01C3E3", "#0148E3", "#0098F8", "#88D1FF", "#0388DB"],
+      pieData: [
+        { value: 0, name: "1" },
+        { value: 0, name: "2" },
+        { value: 0, name: "3" },
+        { value: 0, name: "4" },
+        { value: 0, name: "5" }
+      ],
       pie: {}
     };
+  },
+  watch: {
+    data(val) {
+      this.pieData=[];
+      this.data.forEach(element => {
+        this.pieData.push({ name: element.carType, value: (element.Percentage.replace('%','')) });
+      });
+      this.initPie();
+      let myChart = this.$echarts.init(this.$refs.pieChart);
+      myChart.setOption(this.pie);
+    }
   },
   mounted() {
     this.initPie();
@@ -19,12 +38,12 @@ export default {
     initPie() {
       this.pie = {
         color: [
-          "#0148E3",
-          "#01C3E3",
-          "#0148E3",
+          "#0388db",
+          "#0148e3",
+          "#01c3e3",
+          "#00C6FF",
           "#0098F8",
-          "#88D1FF",
-          "#0388DB"
+          "#88d1ff"
         ],
         series: [
           {
@@ -51,170 +70,7 @@ export default {
                 show: false
               }
             },
-            data: [
-              {
-                value: 0,
-                name: "5",
-                itemStyle: {
-                  color: {
-                    type: "linear",
-                    x: 0,
-                    y: 0,
-                    x2: 0,
-                    y2: 1,
-                    colorStops: [
-                      {
-                        offset: 0,
-                        color: "#0388DB" // 0% 处的颜色
-                      },
-                      {
-                        offset: 1,
-                        color: "#0388DB" // 100% 处的颜色
-                      }
-                    ],
-                    global: false // 缺省为 false
-                  },
-                  shadowColor: "rgba(255,255,255,0.23)",
-                  shadowBlur: 8,
-                  shadowOffsetX: 2
-                }
-              },
-              {
-                value: 0,
-                name: "1",
-                itemStyle: {
-                  color: {
-                    type: "linear",
-                    x: 0,
-                    y: 0,
-                    x2: 0,
-                    y2: 1,
-                    colorStops: [
-                      {
-                        offset: 0,
-                        color: "#0148E3" // 0% 处的颜色
-                      },
-                      {
-                        offset: 1,
-                        color: "#0148E3" // 100% 处的颜色
-                      }
-                    ],
-                    global: false // 缺省为 false
-                  },
-                  shadowColor: "rgba(255,255,255,0.23)",
-                  shadowBlur: 8,
-                  shadowOffsetX: 2
-                }
-              },
-              {
-                value: 0,
-                name: "2",
-                itemStyle: {
-                  color: {
-                    type: "linear",
-                    x: 0,
-                    y: 0,
-                    x2: 0,
-                    y2: 1,
-                    colorStops: [
-                      {
-                        offset: 0,
-                        color: "#01C3E3" // 0% 处的颜色
-                      },
-                      {
-                        offset: 1,
-                        color: "#01C3E3" // 100% 处的颜色
-                      }
-                    ],
-                    global: false // 缺省为 false
-                  },
-                  shadowColor: "rgba(255,255,255,0.23)",
-                  shadowBlur: 8,
-                  shadowOffsetX: 2
-                }
-              },
-              {
-                value: 0,
-                name: "3",
-                itemStyle: {
-                  color: {
-                    type: "linear",
-                    x: 0,
-                    y: 0,
-                    x2: 0,
-                    y2: 1,
-                    colorStops: [
-                      {
-                        offset: 0,
-                        color: "#00C6FF" // 0% 处的颜色
-                      },
-                      {
-                        offset: 1,
-                        color: "#00C6FF" // 100% 处的颜色
-                      }
-                    ],
-                    global: false // 缺省为 false
-                  },
-                  shadowColor: "rgba(255,255,255,0.23)",
-                  shadowBlur: 8,
-                  shadowOffsetX: 2
-                }
-              },
-              {
-                value: 0,
-                name: "4",
-                itemStyle: {
-                  color: {
-                    type: "linear",
-                    x: 0,
-                    y: 0,
-                    x2: 0,
-                    y2: 1,
-                    colorStops: [
-                      {
-                        offset: 0,
-                        color: "#0098F8" // 0% 处的颜色
-                      },
-                      {
-                        offset: 1,
-                        color: "#0098F8" // 100% 处的颜色
-                      }
-                    ],
-                    global: false // 缺省为 false
-                  },
-                  shadowColor: "rgba(255,255,255,0.23)",
-                  shadowBlur: 8,
-                  shadowOffsetX: 2
-                }
-              },
-              {
-                value: 0,
-                name: "5",
-                itemStyle: {
-                  color: {
-                    type: "linear",
-                    x: 0,
-                    y: 0,
-                    x2: 0,
-                    y2: 1,
-                    colorStops: [
-                      {
-                        offset: 0,
-                        color: "#88D1FF" // 0% 处的颜色
-                      },
-                      {
-                        offset: 1,
-                        color: "#88D1FF" // 100% 处的颜色
-                      }
-                    ],
-                    global: false // 缺省为 false
-                  },
-                  shadowColor: "rgba(255,255,255,0.23)",
-                  shadowBlur: 8,
-                  shadowOffsetX: 2
-                }
-              }
-            ]
+            data: this.pieData
           }
         ]
       };

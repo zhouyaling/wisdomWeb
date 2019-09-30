@@ -100,7 +100,8 @@ export default {
       resetAnimation: false, // 重置滚动列表
       showPanel: false, // 显示弹窗
       showHeaderPanel: false, // 显示头像弹窗
-      showBlur: false // 高斯模糊
+      showBlur: false, // 高斯模糊
+      timer1: null
     };
   },
   filters: {
@@ -113,8 +114,11 @@ export default {
   },
   computed: {
     top() {
-      return -this.activeIndex * 131 + "px";
+      return -this.activeIndex * 13.1 + "rem";
     }
+  },
+  beforeDestroy() {
+    window.clearInterval(this.timer1);
   },
   mounted() {
     this.getListData();
@@ -168,7 +172,7 @@ export default {
     // 向上滚动
     ScrollUp2() {
       let _this = this;
-      setInterval(function() {
+      _this.timer1 = window.setInterval(function() {
         _this.resetAnimation = false;
         if (_this.activeIndex < _this.listData.length) {
           _this.activeIndex += 1;
@@ -423,7 +427,7 @@ export default {
 .header-modal {
   width: 28%;
   height: 46%;
- /*  background-image: url(../assets/imgs/header-box-large.png);
+  /*  background-image: url(../assets/imgs/header-box-large.png);
   background-size: 100% 100%; */
   position: relative;
 }

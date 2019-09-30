@@ -1,11 +1,19 @@
 <template>
     <index-layout>
             <div class="main"  slot="main">
+              <div class="title"><img src="@/assets/imgs/line.png" alt=""></div>
               <div class="col-25">
                 <title-bar title="抓拍截图" subText="SNAPSHOT"></title-bar>
                 <div class="module-left">
                   <div class="big-img-box">
                     <img v-bind:src="currentData.image" alt="">
+                     <div class="circle-box-small">
+                        <img src="@/assets/imgs/circle1.png" alt="">
+                        <img src="@/assets/imgs/circle2.png" alt="">
+                        <img src="@/assets/imgs/icon-line1.png" alt="">
+                        <img src="@/assets/imgs/icon-line2.png" alt="">
+                       
+                    </div>
                   </div>
                   <div class="card-box detail-info">
                       <div>
@@ -371,7 +379,7 @@ export default {
   z-index: 1;
 }
 
-.big-img-box img {
+.big-img-box > img {
   width: 88%;
   height: 81%;
   margin: 5.2% auto auto 5.8%;
@@ -418,7 +426,7 @@ export default {
 }
 
 .detail-item > span:nth-of-type(2) {
- /*  font-family: Acens; */
+  /*  font-family: Acens; */
   font-size: 2.2rem;
   color: #009eff;
   display: inline-block;
@@ -427,15 +435,29 @@ export default {
 .detail-item > span:nth-of-type(1) {
   margin-right: 2rem;
   display: inline-block;
+  position: relative;
 }
 
 .detail-item > span:nth-of-type(1)::after {
-  content: "";
-  width: 4.1rem;
+  content: "AGE";
+  font-family: PingFang-Regular;
+  font-size: 0.6rem;
+  color: #ececec;
+  text-align: center;
+  width: 3.8rem;
   height: 0.7rem;
   background: rgba(0, 157, 255, 0.39);
-  position: relative;
-  bottom: -0.5rem;
+  position: absolute;
+  bottom: -0.1rem;
+  left: -0.2rem;
+}
+
+.detail-item:nth-of-type(2) > span:nth-of-type(1)::after {
+  content: "GWNDER";
+}
+
+.detail-item:nth-of-type(3) > span:nth-of-type(1)::after {
+  content: "GLASSES";
 }
 
 .card-bar {
@@ -515,8 +537,9 @@ export default {
 }
 
 .people-info {
-  width: 60%;
+  width: 58%;
   height: 100%;
+  float: left;
 }
 
 .people-info > div {
@@ -680,6 +703,84 @@ export default {
 .pie-s-chart {
   width: 100%;
   height: 100%;
+}
+
+.title {
+  width: 96%;
+  position: absolute;
+  left: 0;
+  top: -7%;
+  text-align: center;
+}
+
+.circle-box-small {
+  width: 2.6rem;
+  height: 2.6rem;
+  position: absolute;
+  left: 5%;
+  top: -6px;
+  z-index: 1;
+}
+
+.circle-box-small > img:nth-of-type(1) {
+  position: absolute;
+  width: 2.6rem;
+  height: 2.6rem;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: circle-move1 18s linear infinite;
+}
+
+.circle-box-small > img:nth-of-type(2) {
+  position: absolute;
+
+  width: 1.5rem;
+  height: 1.5rem;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: circle-move 14s linear infinite;
+}
+
+.circle-box-small > img:nth-of-type(3) {
+  position: absolute;
+  bottom: -2.5rem;
+  left: 50%;
+}
+
+.circle-box-small > img:nth-of-type(4) {
+  position: absolute;
+  left: 24px;
+  top: 11px;
+}
+
+@keyframes circle-move {
+  0% {
+    transform: translate(-50%, -50%) rotate(0);
+  }
+
+  100% {
+    transform: translate(-50%, -50%) rotate(-360deg);
+  }
+}
+
+@keyframes circle-move1 {
+  0% {
+    transform: translate(-50%, -50%) rotate(0);
+  }
+
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+.video-box {
+  width: 41%;
+  float: left;
+  background: rgba(0, 0, 0, 0.23);
+  height: 100%;
+  margin-left: 1%;
 }
 </style>
 

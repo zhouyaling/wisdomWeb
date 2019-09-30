@@ -80,7 +80,7 @@ export default {
           left: 100,
           top: 44,
           cleft: 148,
-          ctop: -56.5
+          ctop: -21.5
         },
         {
           id: 6,
@@ -340,7 +340,7 @@ export default {
 .header-card {
   width: 16.8rem;
   height: 11rem;
-  background-color: #141c2a;
+  background-color: rgba(20,28,42,0.5);
   background-image: url(../../assets/imgs/info-box1.png);
   background-repeat: no-repeat;
   background-size: 100%;

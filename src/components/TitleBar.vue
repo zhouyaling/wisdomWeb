@@ -38,7 +38,7 @@ export default {
 .title-bar > span:nth-of-type(2) {
     width: 50%;
   font-size: 1.4rem;
-color: #9D9D9D;
+color: rgba(157,157,157,0.5);
   letter-spacing: 0;
   text-align: right;
 }
