@@ -72,7 +72,7 @@ export default {
   left: 11%;
   top: 12.5%;
   z-index: 1;
-  width: 79%;
+  width: 81%;
   height: 83%;
   /*  margin: 7% 8.5% 0% 12.5%; */
 }

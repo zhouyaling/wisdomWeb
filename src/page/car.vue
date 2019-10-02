@@ -20,7 +20,7 @@
                             </div>
                     </div>
                   </div>
-                    <title-bar title="车型" subText="VEHICLE TYPE"></title-bar>
+                    <title-bar style="margin-top:1.5rem;" title="车型" subText="VEHICLE TYPE"></title-bar>
                   <div class="card-box" >
                     <div class="car-type-box" >
                         <div> <pie-chart :data="carTypeList"></pie-chart></div>
@@ -35,7 +35,7 @@
 
                     </div>
                   </div>
-                    <title-bar title="车身颜色" subText="BODY COLOR"></title-bar>
+                    <title-bar style="margin-top:1.5rem" title="车身颜色" subText="BODY COLOR"></title-bar>
                   <div class="card-box" style="max-height:20rem;overflow:hidden">
                     <div class="car-color-box car-color-box1" >
                       <div v-bind:class="resetColorAnimation?'reset-animation':''" :style="`top:${ctop}`">
@@ -410,7 +410,7 @@ export default {
 .col-25 {
   width: 25.6%;
   float: left;
-  margin-top:3rem;
+  margin-top:4rem;
 }
 
 .col-50 {
@@ -425,8 +425,8 @@ export default {
   margin-top: 1rem;
   margin: 0.6rem 0.4% 1rem 0;
   box-sizing: border-box;
-  padding: 2rem 0 2rem 0;
-  min-height: 18rem;
+  padding: 1.5rem 0 1.5rem 0;
+  min-height: 17.4rem;
 }
 
 .big-img-box {
@@ -555,7 +555,7 @@ export default {
 }
 
 .car-type-box {
-  height: 18rem;
+  height: 17rem;
   width: 100%;
   position: relative;
 }
@@ -885,14 +885,14 @@ text-align: center;
   width: 41%;
   height: 100%;
   float: left;
-  margin-top:3rem;
+  margin-top:4rem;
 }
 
 .col-33{
   width: 33%;
   height: 100%;
   float: left;
-  margin-top:3rem;
+  margin-top:4rem;
 }
 
 .image-groups
