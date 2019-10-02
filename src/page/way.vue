@@ -50,7 +50,7 @@
                   <area-module :way="wayList"></area-module>
                 </div>
                 <div class="info-box">
-                    <div class="people-info">
+                    <!--<div class="people-info">
                        <div class="card-box">
                          <div class="count-title" @click="test">总来访人数</div>
                          <div class="count-sub-title">Total number of visitors</div>
@@ -86,6 +86,12 @@
                        </div>
                     </div>
                     <div class="video-box">
+                    </div>-->
+                    <div class="video-groups">
+a
+                    </div>
+                    <div class="video-infos">
+                      <div class="video-infos-title">实事监控画面</div>
                     </div>
                 </div>
               </div>
@@ -784,6 +790,35 @@ export default {
   background: rgba(31, 40, 57, 0.4);
   height: 100%;
   margin-left: 1%;
+}
+
+.video-groups{
+  width:80%;
+  height: 100%;
+  float: left;
+}
+
+.video-infos{
+  width:20%;
+  height: 100%;
+  margin-left: 0%;
+  float: left;
+  background: rgba(49,77,128,0.32);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.video-infos-title{
+  width: 14.5rem;
+  height: 4.6rem;
+  background: url(../assets/imgs/line3.png) no-repeat center;
+  background-size: 100% 100%;
+  font-family: PingFang-Regular;
+  font-size: 2.1rem;
+  color:#ffffff;
+  text-align: center;
+  line-height: 4.6rem;
 }
 </style>
 
