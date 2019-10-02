@@ -70,7 +70,7 @@ export default {
   /* left: 0;
   top: 0; */
   left: 11%;
-  top: 12.5%;
+  top: 15%;
   z-index: 1;
   width: 79%;
   height: 83%;

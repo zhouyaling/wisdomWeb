@@ -2,6 +2,13 @@
     <index-layout>
             <div slot="main"  class="main" >
               <div class="title"></div>
+              <div class="sub-title">
+                <span>SCREEN MONITOR</span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
               <div class="col-25">
                   <title-bar title="车辆品牌" subText="VEHICLE BRAND"></title-bar>
                   <div class="card-box">
@@ -925,6 +932,25 @@ border-radius: 1.4rem;
   height: 24.5rem;
   background: url(../assets/imgs/carlist-box.png) no-repeat center;
   background-size: 100% 100%;
+}
+
+.sub-title{
+  width:100%;
+  height:2.4rem;
+  background: url(../assets/imgs/line4.png) no-repeat center;
+  background-size: 100% 100%;
+  position: absolute;
+  left: 0;
+  top:-2rem;
+}
+
+.sub-title>span{
+font-family: din;
+font-size: 1.6rem;
+color: #ffffff;
+letter-spacing: 1.04px;
+line-height: 2.4rem;
+padding-left: 5rem;
 }
 </style>
 
