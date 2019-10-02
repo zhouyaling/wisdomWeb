@@ -317,7 +317,7 @@ export default {
                       // return `${data.data.value.toFixed(0)}%\n${data.name}`;
                     },
                     fontSize: 12,
-                    fontFamily: "Acens",
+                    fontFamily: "Din",
                     /*  lineHeight: 25, */
                     color: "#FFFFFF",
                     verticalAlign: "top",
@@ -412,7 +412,7 @@ export default {
 }
 
 .detail-time {
-  font-family: Acens;
+  font-family: Din;
   font-size: 1.2rem;
   color: #ffffff;
   margin-top: 1.5rem;
@@ -426,7 +426,7 @@ export default {
 }
 
 .detail-item > span:nth-of-type(2) {
-  /*  font-family: Acens; */
+  /*  font-family: Din; */
   font-size: 2.2rem;
   color: #009eff;
   display: inline-block;
@@ -448,8 +448,9 @@ export default {
   height: 0.7rem;
   background: rgba(0, 157, 255, 0.39);
   position: absolute;
-  bottom: -0.1rem;
+  bottom: -0.2rem;
   left: -0.2rem;
+  line-height: 1.5rem;
 }
 
 .detail-item:nth-of-type(2) > span:nth-of-type(1)::after {
@@ -485,7 +486,9 @@ export default {
   width: 90%;
   display: inline-block;
   margin: 1.7rem 5% 0 5%;
+  -webkit-box-sizing: border-box;
   box-sizing: border-box;
+  height: 35.5rem;
 }
 
 .list {
@@ -515,7 +518,7 @@ export default {
 .list-item > div:nth-of-type(3) {
   width: 40%;
   text-align: right;
-  font-family: Acens;
+  font-family: Din;
   font-size: 1.8rem;
   color: #009eff;
   letter-spacing: 0.2rem;
@@ -581,7 +584,7 @@ export default {
 }
 
 .circle-text p:nth-of-type(1) {
-  font-family: Acens;
+  font-family: Din;
   font-size: 2.8rem;
   color: #ffffff;
   letter-spacing: 0.2rem;
@@ -618,7 +621,7 @@ export default {
 }
 
 .count-box span {
-  font-family: Acens;
+  font-family: Din;
   font-size: 2.3rem;
   color: #ffffff;
   margin-right: 0.8rem;
@@ -778,7 +781,7 @@ export default {
 .video-box {
   width: 41%;
   float: left;
-  background: rgba(0, 0, 0, 0.23);
+  background: rgba(31, 40, 57, 0.4);
   height: 100%;
   margin-left: 1%;
 }

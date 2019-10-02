@@ -326,7 +326,7 @@ export default {
 .alarm-item > div {
   width: 25%;
   text-align: center;
-  font-family: Acens;
+  font-family: Din;
   font-size: 1.8rem;
   color: #fbfdff;
 }
@@ -461,7 +461,7 @@ export default {
 .header-big-text p {
   position: relative;
   left: 33%;
-  font-family: Acens;
+  font-family: Din;
   font-size: 2rem;
   color: #ffffff;
 }

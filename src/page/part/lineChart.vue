@@ -60,7 +60,7 @@ export default {
               show: true,
               color: "#ffffff",
               fontSize: 10,
-              fontFamily: "Acens"
+              fontFamily: "Din"
             }
           }
         ],
@@ -90,7 +90,7 @@ export default {
               show: true,
               color: "#ffffff",
               fontSize: 10,
-              fontFamily: "Acens"
+              fontFamily: "Din"
             }
           }
         ],

@@ -1,5 +1,5 @@
 #app {
-    font-family: "Avenir", Helvetica, Arial, sans-serif;
+    font-family: "PingFang-Regular", "Microsoft YaHei", "Avenir", Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     height: 100%;
@@ -15,11 +15,14 @@ body {
 }
 
 html {
-    font-size: 10px;
+    /* font-size: 10px; */
+    font-size: 10px!important;
 }
 
+.body {}
+
 @font-face {
-    font-family: Acens;
+    font-family: Din;
     src: url("../fonts/DIN.ttf");
     font-weight: normal;
     font-style: normal;

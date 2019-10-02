@@ -379,7 +379,7 @@ export default {
 }
 
 .header-card > div p {
-  font-family: Acens;
+  font-family: Din;
   font-size: 1.2rem;
   color: #ffffff;
   text-align: center;

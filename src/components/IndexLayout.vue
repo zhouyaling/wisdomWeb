@@ -228,7 +228,7 @@ export default {
 </style>
 <style>
 .to__led-number {
-  font-family: Acens;
+  font-family: Din;
   position: relative;
   padding: 0 0.03rem;
   text-align: center;

@@ -384,7 +384,7 @@ export default {
 }
 
 .percent-unit {
-  font-family: Acens;
+  font-family: Din;
   font-size: 1.2rem;
 }
 
@@ -462,7 +462,7 @@ export default {
 
 .box-img > span:nth-of-type(1) {
   display: inline-block;
-  font-family: Acens;
+  font-family: Din;
   font-size: 2rem;
   color: #ffffff;
   text-align: center;
@@ -591,7 +591,7 @@ export default {
 
 .pie-ledge .pie-ledge-item dd:nth-of-type(2) {
   margin-left: 1.6rem;
-  font-family: Acens;
+  font-family: Din;
   font-size: 1.5rem;
   color: #ffffff;
   line-height: 1.8rem;
@@ -654,7 +654,7 @@ export default {
 }
 
 .other-info-item > span:nth-of-type(2) {
-  font-family: Acens;
+  font-family: Din;
   font-size: 2.4rem;
   color: #ffffff;
   letter-spacing: 0;
@@ -759,7 +759,7 @@ export default {
 }
 
 .info-detail-item > span:nth-of-type(3) {
-  font-family: Acens;
+  font-family: Din;
   font-size: 1.4rem;
   letter-spacing: 0.1rem;
   width: 30%;
