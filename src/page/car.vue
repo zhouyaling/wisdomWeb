@@ -57,8 +57,54 @@
                           </div> -->
                     </div>
                   </div>
+              </div>
+              <div class="col-41">
+
+              </div>
+              <div class="col-33">
+                <div class="image-groups">
+                  <div><img v-bind:src="carInfoList.length>0?carInfoList[0].carImg:''"/></div>
+                  <div><img v-bind:src="carInfoList.length>0?carInfoList[0].carImg:''"/></div>
                 </div>
-                <div class="col-50">
+                <div class="new-car-box">
+                  <title-bar style="margin:2.2rem 0" title="车流统计" subText="VEHICLE FLOW"></title-bar>
+                  <div class="card-box">
+                    <div class="chart-box">
+                          <line-chart color = "#0094F2" name="今日车流量" :xData="todayCarInfoXData" :yData="todayCarInfoYData"></line-chart>
+                    </div>
+                  </div>
+                </div>
+                <div class="carlist-box">
+                        <title-bar style="margin:2.2rem 0" title="车辆进出动态" subText="VEHICLE ENTRY AND EXIT DYNAMICS"></title-bar>
+                        <div class="card-box"  style="padding:0;background:none">
+                            <div class="car-info-box">
+                                <div class="info-title-bar">
+                                    <span>车牌号</span>
+                                    <span>出入口位置</span>
+                                    <span>出入场时间</span>
+                                    <span>状态</span>
+                                </div>
+                                <div class="info-detail-box" >
+                                    <div class="list-box" v-bind:class="resetAnimation?'reset-animation':''" :style="{top}">
+                                      <div class="info-detail-item" v-for="(item,index) in carInfoList" :key="index">
+                                        <span>{{item.carNum}}</span>
+                                          <span>--</span>
+                                          <span>{{item.time}}</span>
+                                          <span>{{item.InOut==1?"正常出场":"正常入场"}}</span>
+                                      </div>
+                                      <div class="info-detail-item" v-for="(item,index) in carInfoList" :key="index+111">
+                                          <span>{{item.carNum}}</span>
+                                          <span>--</span>
+                                          <span>{{item.time}}</span>
+                                          <span>{{item.InOut==1?"正常出场":"正常入场"}}</span>
+                                      </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+              </div>
+              <!--<div class="col-50">
                     <div class="video-box">
                     </div>
                     <div class="picture-box">
@@ -94,8 +140,8 @@
                             </div>
                         </div>
                     </div>
-                </div>
-              <div class="col-25" style="float:right;">
+              </div>
+             <div class="col-25" style="float:right;">
                   <title-bar title="今日车流量" subText="VEHICLE FLOW"></title-bar>
                   <div class="card-box">
                     <div class="chart-box">
@@ -128,8 +174,8 @@
                           </div>
                           
                     </div>
-                  </div>
-              </div>
+                </div>
+              </div>-->
             </div>
     </index-layout>
 </template>
@@ -711,18 +757,22 @@ export default {
   align-items: center;
   justify-content: center;
   height: 4rem;
-  background: rgba(36, 46, 65, 0.76);
+  /*background: rgba(36, 46, 65, 0.76);*/
 }
 
 .info-title-bar > span {
   width: 25%;
   display: block;
   text-align: center;
+  font-family: PingFang-Regular;
+font-size: 1.4rem;
+color: #3F88FF;
+letter-spacing: 0;
 }
 
 .info-detail-box {
-  height: 16rem;
-  background: rgba(31, 40, 57, 0.39);
+  height: 18rem;
+  /*background: rgba(31, 40, 57, 0.39);*/
   overflow: hidden;
 }
 
@@ -746,10 +796,10 @@ export default {
   justify-content: center;
   height: 5rem;
   font-family: PingFang-Regular;
-  font-size: 1.6rem;
+  font-size: 1.3rem;
   color: #ffffff;
   letter-spacing: 0;
-  border-bottom: 1px solid #0f3555;
+  /*border-bottom: 1px solid #0f3555;*/
 }
 
 .info-detail-item > span {
@@ -759,11 +809,19 @@ export default {
 }
 
 .info-detail-item > span:nth-of-type(3) {
-  font-family: Din;
+  /*font-family: Din;
   font-size: 1.4rem;
-  letter-spacing: 0.1rem;
+  letter-spacing: 0.1rem;*/
   width: 30%;
-  line-height: 1.5rem;
+  /*line-height: 1.5rem;*/
+}
+
+.info-detail-item>span:nth-of-type(4){
+  font-family: PingFang-Regular;
+font-size: 1.3rem;
+color: #00FF92;
+letter-spacing: 0;
+text-align: center;
 }
 
 .title {
@@ -813,6 +871,60 @@ export default {
   0% {
     width: 0;
   }
+}
+
+.col-41{
+  width: 41%;
+  height: 100%;
+  float: left;
+}
+
+.col-33{
+  width: 33%;
+  height: 100%;
+  float: left;
+}
+
+.image-groups
+{
+  width:100%;
+  height: 17.3rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: row;
+}
+
+.image-groups>div{
+  width:48%;
+  height: 100%;
+  background: #1B213A;
+border: 1px solid #50A8FF;
+border-radius: 1.4rem;
+}
+
+.image-groups>div img{
+  width:95%;
+  height:95%;
+  border-radius: 1.4rem;
+  margin-top: 2.5%;
+  margin-left: 2.5%;
+}
+
+.new-car-box{
+  width: 100%;
+  
+}
+
+.carlist-box{
+  width: 100%;
+}
+
+.car-info-box{
+  width: 100%;
+  height: 24.5rem;
+  background: url(../assets/imgs/carlist-box.png) no-repeat center;
+  background-size: 100% 100%;
 }
 </style>
 
