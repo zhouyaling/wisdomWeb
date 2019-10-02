@@ -51,13 +51,18 @@ export default {
 .alarm-img {
   width: 58%;
   height: 83.5%;
-  background-color: #192741;
+  /*background-color: #192741;*/
+  background: url(../assets/imgs/alarm-box.png) no-repeat center;
+  background-size: 100% 100%;
   float: left;
 }
 
 .alarm-img img{
-  width: 100%;
-  height: 100%;
+    width: 97%;
+  height: 95%;
+  
+  margin-left: 1%;
+  margin-top: 2%;
 }
 
 .alarm-info {
