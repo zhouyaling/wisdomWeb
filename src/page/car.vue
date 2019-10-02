@@ -410,6 +410,7 @@ export default {
 .col-25 {
   width: 25.6%;
   float: left;
+  margin-top:3rem;
 }
 
 .col-50 {
@@ -425,7 +426,7 @@ export default {
   margin: 0.6rem 0.4% 1rem 0;
   box-sizing: border-box;
   padding: 2rem 0 2rem 0;
-  min-height: 20rem;
+  min-height: 18rem;
 }
 
 .big-img-box {
@@ -884,12 +885,14 @@ text-align: center;
   width: 41%;
   height: 100%;
   float: left;
+  margin-top:3rem;
 }
 
 .col-33{
   width: 33%;
   height: 100%;
   float: left;
+  margin-top:3rem;
 }
 
 .image-groups
@@ -941,7 +944,7 @@ border-radius: 1.4rem;
   background-size: 100% 100%;
   position: absolute;
   left: 0;
-  top:-2rem;
+  top:-0.3rem;
 }
 
 .sub-title>span{
