@@ -88,7 +88,7 @@
                     <div class="video-box">
                     </div>-->
                     <div class="video-groups">
-a
+
                     </div>
                     <div class="video-infos">
                       <div class="video-infos-title">实事监控画面</div>
@@ -793,13 +793,13 @@ export default {
 }
 
 .video-groups{
-  width:80%;
+  width:84%;
   height: 100%;
   float: left;
 }
 
 .video-infos{
-  width:20%;
+  width:16%;
   height: 100%;
   margin-left: 0%;
   float: left;
