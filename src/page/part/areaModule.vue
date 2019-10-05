@@ -66,7 +66,7 @@ export default {
         {
           id: 3,
           left: 10,
-          top: 331,
+          top: 33.1,
           cleft: 0,
           ctop: 35,
           name:"点位3"
