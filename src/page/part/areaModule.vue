@@ -18,7 +18,7 @@
                   <p>{{item.time | splitDate}}</p>
                   <p>{{item.time | splitTime}}</p>
                   <!-- <p>停留时长:2分钟</p> -->
-                  <!-- <p>停车场</p> -->
+                  <p>{{item.pointName}}</p>
                 </div>
               </div>
             </div>
@@ -52,35 +52,40 @@ export default {
           left: 100,
           top: 249,
           cleft: 158,
-          ctop: 240
+          ctop: 240,
+          name:"点位1"
         },
         {
           id: 2,
           left: 344,
           top: 196,
           cleft: 390,
-          ctop: 178
+          ctop: 178,
+          name:"点位2"
         },
         {
           id: 3,
           left: 10,
           top: 331,
           cleft: 0,
-          ctop: 350
+          ctop: 350,
+          name:"点位3"
         },
         {
           id: 4,
           left: 866,
           top: 206,
           cleft: 850,
-          ctop: 242
+          ctop: 242,
+          name:"点位4"
         },
         {
           id: 5,
           left: 100,
           top: 44,
           cleft: 148,
-          ctop: -21.5
+          ctop: -21.5,
+          name:"点位5"
         },
         {
           id: 6,
@@ -88,7 +93,8 @@ export default {
           top: 59,
           rotate: 281,
           cleft: -32,
-          ctop: 100
+          ctop: 100,
+          name:"点位6"
         }
       ],
       infoList: [], // 点位信息
@@ -154,7 +160,8 @@ export default {
             cacheListData.push({
               ...element,
               ctop: item.ctop,
-              cleft: item.cleft
+              cleft: item.cleft,
+              pointName:item.name
             });
           }
         });

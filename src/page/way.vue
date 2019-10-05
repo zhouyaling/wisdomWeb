@@ -380,7 +380,7 @@ export default {
   width: 100%;
   height: 100%;
   background: url(../assets/imgs/small-video-box.png) no-repeat center;
-  background-size: 100% auto;
+  background-size: 100% 100%;
   position: absolute;
   top: 0;
   z-index: 1;
@@ -495,7 +495,7 @@ export default {
   margin: 1.7rem 5% 0 5%;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
-  height: 35.5rem;
+  height: 36rem;
 }
 
 .list {

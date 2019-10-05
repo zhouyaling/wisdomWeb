@@ -58,11 +58,6 @@ export default {
 .container {
   height: 100%;
   position: relative;
-  background-color: #0E1522;
-  box-sizing: border-box;
-  background-image: url(../assets/imgs/back-icon.png);
-  background-repeat: repeat;
-  background-size: 3.8rem auto;
 }
 
 .main {

@@ -19,7 +19,13 @@ html {
     font-size: 10px!important;
 }
 
-.body {}
+body {
+    background-color: #0E1522;
+    box-sizing: border-box;
+    background-image: url(../imgs/back-icon.png);
+    background-repeat: repeat;
+    background-size: 3.8rem auto;
+}
 
 @font-face {
     font-family: Din;
