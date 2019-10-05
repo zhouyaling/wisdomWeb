@@ -341,6 +341,8 @@ export default {
   position: absolute;
   bottom: 1.4rem;
   left: -0.5rem;
+  width: 3.2rem;
+  height: 2.5rem;
 }
 
 /* 头像信息 */

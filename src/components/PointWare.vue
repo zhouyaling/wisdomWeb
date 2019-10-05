@@ -15,37 +15,37 @@ export default {
 <style scoped>
 .house-point-box {
   position: absolute;
-  width: 35px;
-  height: 35px;
-  left: -12px;
-  top: -12px;
+  width: 3.5rem;
+  height: 3.5rem;
+  left: -1.2rem;
+  top: -1.2rem;
 }
 
 .house-point-box div:nth-of-type(1) {
-  width: 30px;
-  height: 30px;
+  width: 3rem;
+  height: 3rem;
   border-radius: 50%;
   background: rgba(155,217,255, 0.1);
   position: absolute;
   left: 0;
   top: 0;
-  margin-left: 2px;
-  margin-top: 2px;
+  margin-left: 0.2rem;
+  margin-top: 0.2rem;
   opacity: 0;
   animation: show-big-1 2s linear infinite;
   -webkit-animation: show-big-1 2s linear infinite;
 }
 
 .house-point-box div:nth-of-type(2) {
-  width: 25px;
-  height: 25px;
+  width: 2.5rem;
+  height: 2.5rem;
   border-radius: 50%;
   background: rgba(155,217,255, 0.2);
   position: absolute;
   left: 0;
   top: 0;
-  margin-left: 5px;
-  margin-top: 5px;
+  margin-left: 0.5rem;
+  margin-top: 0.5rem;
   opacity: 0;
   animation: show-big-2 2s linear infinite;
   -webkit-animation: show-big-2 2s linear infinite;
