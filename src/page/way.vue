@@ -388,8 +388,8 @@ export default {
 
 .big-img-box > img {
   width: 88%;
-  height: 81%;
-  margin: 5.2% auto auto 5.8%;
+  height: 80%;
+  margin: 6.2% auto auto 5.8%;
 }
 
 .card-box {
@@ -721,6 +721,18 @@ export default {
   left: 0;
   top: -7%;
   text-align: center;
+}
+
+.title>img{
+  width: 124.2rem;
+  height: auto;
+}
+
+@media screen and (min-width:3739px){
+  .title>img{
+  width: 100rem;
+  height: auto;
+}
 }
 
 .circle-box-small {

@@ -842,6 +842,17 @@ text-align: center;
   background-size: auto 95%;
 }
 
+@media screen and (min-width:3739px){
+  .title{
+    position: absolute;
+    top: -8rem;
+    left:8%;
+    width: 80%;
+    height: 6.6rem;
+     background-size:100% auto;
+  }
+}
+
 .car-info-box {
   position: relative;
   animation: all 1s;

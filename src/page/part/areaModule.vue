@@ -73,9 +73,9 @@ export default {
         },
         {
           id: 4,
-          left: 86.6,
+          left: 80.6,
           top: 20.6,
-          cleft: 85,
+          cleft: 65,
           ctop: 24.2,
           name:"点位4"
         },
@@ -140,8 +140,8 @@ export default {
       var canvas = this.$refs.myCanvas;
       this.ctx = canvas.getContext("2d");
       //this.ctx.imageSmoothingEnabled = true;
-      canvas.width = 1062;
-      canvas.height = 406;
+      canvas.width = 1062 * 1;
+      canvas.height = 406 * 1;
       this.ctx.beginPath();
       this.ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -154,7 +154,7 @@ export default {
             // 点
             vertices.push({
               x: item.left *10,
-              y: item.top * 10
+              y: item.top *10
             });
             // 头像
             cacheListData.push({

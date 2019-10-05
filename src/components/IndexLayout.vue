@@ -95,6 +95,12 @@ export default {
 .logo {
   left: 3.5%;
   top: 5%;
+
+}
+
+.logo>img{
+  width: 21.7rem;
+  height: 3.4rem;
 }
 
 .left-top-tip {
@@ -102,9 +108,29 @@ export default {
   top: 16.5%;
 }
 
+.left-top-tip>img:nth-of-type(1){
+  width: 1.7rem;
+  height: 2rem;
+}
+
+.left-top-tip>img:nth-of-type(2){
+  width: 3.2rem;
+  height: 21.4rem;
+}
+
 .right-top-tip {
   right: 3.5%;
   top: 5%;
+}
+
+.right-top-tip>img:nth-of-type(1){
+  width: 1.6rem;
+  height: 1.6rem;
+}
+
+.right-top-tip>img:nth-of-type(2){
+  width: 25.8rem;
+  height: 12.6rem;
 }
 
 .left-bottom-tip {
@@ -112,10 +138,21 @@ export default {
   bottom: 5%;
 }
 
+.left-bottom-tip>img{
+  width: 3.1rem;
+  height: 0.7rem
+}
+
 .right-bottom-tip {
   right: 3.5%;
   bottom: 5%;
 }
+
+.right-bottom-tip>img{
+  width: 3.1rem;
+  height: 0.7rem
+}
+
 
 .left-top-tip > img:nth-of-type(2) {
   margin-left: 40px;
@@ -180,43 +217,43 @@ export default {
 
 @keyframes triangle-move {
   0% {
-    transform: translateY(-8px);
+    transform: translateY(-0.8rem);
     opacity: 0.2;
   }
 
   24.9% {
-    transform: translateY(-8px);
+    transform: translateY(-0.8rem);
     opacity: 1;
   }
   25% {
-    transform: translateY(40px);
+    transform: translateY(4rem);
     opacity: 0.2;
   }
 
   49.9% {
-    transform: translateY(40px);
+    transform: translateY(4rem);
     opacity: 1;
   }
   50% {
-    transform: translateY(110px);
+    transform: translateY(11rem);
     opacity: 0.2;
   }
 
   74.9% {
-    transform: translateY(110px);
+    transform: translateY(11rem);
     opacity: 1;
   }
   75% {
-    transform: translateY(200px);
+    transform: translateY(20rem);
     opacity: 0.2;
   }
 
   99.9% {
-    transform: translateY(200px);
+    transform: translateY(20rem);
     opacity: 1;
   }
   100% {
-    transform: translateY(200px);
+    transform: translateY(20rem);
     opacity: 0.2;
   }
 }
