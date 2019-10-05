@@ -236,6 +236,7 @@ export default {
       _this.$api.queryUserList(obj).then(result => {
         console.log("获取人员动线", result);
         _this.wayList = result;
+         ConsoleWrite(JSON.stringify(result));
       });
     },
 

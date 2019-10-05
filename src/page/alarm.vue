@@ -143,6 +143,7 @@ export default {
     // 详情
     showDatail(item) {
       this.alramInfo = item;
+       ConsoleWrite(JSON.stringify(item));
     },
 
     // 获取历史列表
