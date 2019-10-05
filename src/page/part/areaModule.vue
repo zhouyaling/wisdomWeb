@@ -407,13 +407,14 @@ export default {
 }
 
   .floor-img1{
-      width:99%;
+      width:98%;
     height: auto;
+    transform: scale(1,1.06) translate(-50%, -50%);
   }
 
    .floor-img2{
-    width:99%;
-    height: auto;
+    width:73.4rem;
+    height: 42.4rem;
    }
 
 
