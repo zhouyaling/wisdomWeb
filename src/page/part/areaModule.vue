@@ -22,8 +22,8 @@
                 </div>
               </div>
             </div>
-            <img v-show="currentFloor==1" src="@/assets/imgs/house-map.png" alt="">
-            <img v-show="currentFloor==2" src="@/assets/imgs/house-map1.png" alt="">
+            <img class="floor-img1" v-show="currentFloor==1" src="@/assets/imgs/house-map.png" alt="">
+            <img class="floor-img2" v-show="currentFloor==2" src="@/assets/imgs/house-map1.png" alt="">
        </div>
        <div class="floor-btn">
            <div v-bind:class="currentFloor==1?'active':''" @click="changeFloor(1)">
@@ -403,6 +403,18 @@ export default {
 .header-text {
   margin-top: 4rem;
 }
+
+  .floor-img1{
+    width:106.2rem;
+    height: 40.6rem;
+  }
+
+   .floor-img2{
+    width:73.4rem;
+    height: 42.4rem;
+  }
+
+
 </style>
 
 

@@ -308,7 +308,7 @@ export default {
 .alarm-list .alarm-item {
   width: 95%;
   margin: 2rem 2.5% 0;
-  max-height: 109px;
+  max-height: 10.9rem;
   height: 10.9rem;
   /*  background-image: linear-gradient(
     to right,
