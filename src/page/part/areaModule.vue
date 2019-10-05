@@ -4,14 +4,14 @@
             <canvas v-show="currentFloor==1" class="canvas" ref="myCanvas"></canvas>
             <!-- 摄像头区域 -->
             <div class="monitors" v-show="currentFloor==1">
-                <div class="monitor-item" v-for="(item,index) in pointList" :key="index" v-bind:class="'m'+ (index+1)" v-bind:style="`top:${item.top}px;left:${item.left}px;transform:rotate(${item.rotate}deg)`">
+                <div class="monitor-item" v-for="(item,index) in pointList" :key="index" v-bind:class="'m'+ (index+1)" v-bind:style="`top:${item.top}rem;left:${item.left}rem;transform:rotate(${item.rotate}deg)`">
                     <img src="@/assets/imgs/monitor1.png" alt="">
                     <point-ware></point-ware>
                 </div>
             </div>
             <!-- 头像信息区域 -->
             <div class="header-infos" v-show="currentFloor==1">
-              <div class="header-card"  v-for="(item,index) in headerListCacheData" :key="index" v-bind:class="'m'+ (index+1)" v-bind:style="`top:${item.ctop}px;left:${item.cleft}px;`">
+              <div class="header-card"  v-for="(item,index) in headerListCacheData" :key="index" v-bind:class="'m'+ (index+1)" v-bind:style="`top:${item.ctop}rem;left:${item.cleft}rem;`">
                 <div class="shadow"></div>
                 <div class="header"><img v-bind:src="item.image" alt=""></div>
                 <div class="header-text">
@@ -49,18 +49,18 @@ export default {
       pointList: [
         {
           id: 1,
-          left: 100,
-          top: 249,
-          cleft: 158,
-          ctop: 240,
+          left: 10,
+          top: 24.9,
+          cleft: 15.8,
+          ctop: 24,
           name:"点位1"
         },
         {
           id: 2,
-          left: 344,
-          top: 196,
-          cleft: 390,
-          ctop: 178,
+          left: 34.4,
+          top: 19.6,
+          cleft: 39,
+          ctop: 17.8,
           name:"点位2"
         },
         {
@@ -68,32 +68,32 @@ export default {
           left: 10,
           top: 331,
           cleft: 0,
-          ctop: 350,
+          ctop: 35,
           name:"点位3"
         },
         {
           id: 4,
-          left: 866,
-          top: 206,
-          cleft: 850,
-          ctop: 242,
+          left: 86.6,
+          top: 20.6,
+          cleft: 85,
+          ctop: 24.2,
           name:"点位4"
         },
         {
           id: 5,
-          left: 100,
-          top: 44,
-          cleft: 148,
-          ctop: -21.5,
+          left: 10,
+          top: 4.4,
+          cleft: 14.8,
+          ctop: -2.15,
           name:"点位5"
         },
         {
           id: 6,
-          left: 1,
-          top: 59,
+          left: 0.1,
+          top: 5.9,
           rotate: 281,
-          cleft: -32,
-          ctop: 100,
+          cleft: -3.2,
+          ctop: 10,
           name:"点位6"
         }
       ],
@@ -153,8 +153,8 @@ export default {
           if (item.id == index + 1) {
             // 点
             vertices.push({
-              x: item.left,
-              y: item.top
+              x: item.left *10,
+              y: item.top * 10
             });
             // 头像
             cacheListData.push({
@@ -405,14 +405,14 @@ export default {
 }
 
   .floor-img1{
-    width:106.2rem;
-    height: 40.6rem;
+      width:99%;
+    height: auto;
   }
 
    .floor-img2{
-    width:73.4rem;
-    height: 42.4rem;
-  }
+    width:99%;
+    height: auto;
+   }
 
 
 </style>
