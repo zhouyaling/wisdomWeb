@@ -47,55 +47,57 @@ export default {
     return {
       currentFloor: 1,
       pointList: [
+       
         {
           id: 1,
-          left: 10,
-          top: 24.9,
-          cleft: 15.8,
-          ctop: 24,
+          left: 31.4,
+          top: 19.6,
+          cleft: 36,
+          ctop: 17.8,
           name:"点位1"
         },
         {
           id: 2,
-          left: 34.4,
-          top: 19.6,
-          cleft: 39,
-          ctop: 17.8,
+          left: 10,
+          top: 38.1,
+          cleft: 15,
+          ctop: 40,
           name:"点位2"
         },
-        {
+         {
           id: 3,
-          left: 10,
-          top: 33.1,
-          cleft: 0,
-          ctop: 35,
+          left: 2,
+          top: 24.5,
+          cleft:4.5,
+          ctop: 26,
           name:"点位3"
         },
-        {
+       /* {
           id: 4,
           left: 80.6,
           top: 20.6,
           cleft: 65,
           ctop: 24.2,
           name:"点位4"
+        },*/
+         {
+          id: 4,
+          left: 6.1,
+          top: 19.9,
+          /*rotate: 281,*/
+          cleft:15.2,
+          ctop: 14,
+          name:"点位4"
         },
         {
-          id: 5,
+          id:5,
           left: 10,
-          top: 4.4,
+          top: 10.4,
           cleft: 14.8,
-          ctop: -2.15,
+          ctop: 0.15,
           name:"点位5"
         },
-        {
-          id: 6,
-          left: 0.1,
-          top: 5.9,
-          rotate: 281,
-          cleft: -3.2,
-          ctop: 10,
-          name:"点位6"
-        }
+       
       ],
       infoList: [], // 点位信息
 
@@ -343,6 +345,33 @@ export default {
   left: -0.5rem;
   width: 3.2rem;
   height: 2.5rem;
+}
+.monitor-item:nth-of-type(2)>img,
+.monitor-item:nth-of-type(1)>img{
+  position: absolute;
+    bottom: 1.4rem;
+    left: -2rem;
+    width: 3.2rem;
+    height: 2.5rem;
+    transform: rotate(-110deg);
+}
+
+.monitor-item:nth-of-type(5)>img{
+  position: absolute;
+  bottom: -1.6rem;
+  left: 0.5rem;
+  width: 3.2rem;
+  height: 2.5rem;
+  transform: rotate(58deg);
+}
+
+.monitor-item:nth-of-type(4)>img{
+  position: absolute;
+  bottom: -1.6rem;
+  left: 0.5rem;
+  width: 3.2rem;
+  height: 2.5rem;
+  transform: rotate(58deg);
 }
 
 /* 头像信息 */
