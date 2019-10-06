@@ -50,17 +50,17 @@ export default {
        
         {
           id: 1,
-          left: 31.4,
+          left: 46.4,
           top: 19.6,
-          cleft: 36,
-          ctop: 17.8,
+          cleft: 44,
+          ctop: 21.8,
           name:"点位1"
         },
         {
           id: 2,
-          left: 10,
-          top: 38.1,
-          cleft: 15,
+          left: 26,
+          top: 40.1,
+          cleft: 27,
           ctop: 40,
           name:"点位2"
         },
@@ -68,8 +68,8 @@ export default {
           id: 3,
           left: 2,
           top: 24.5,
-          cleft:4.5,
-          ctop: 26,
+          cleft:-1.5,
+          ctop: 30,
           name:"点位3"
         },
        /* {
@@ -82,18 +82,18 @@ export default {
         },*/
          {
           id: 4,
-          left: 6.1,
+          left: 4.1,
           top: 19.9,
           /*rotate: 281,*/
-          cleft:15.2,
-          ctop: 14,
+          cleft:9.2,
+          ctop: 16,
           name:"点位4"
         },
         {
           id:5,
-          left: 10,
-          top: 10.4,
-          cleft: 14.8,
+          left: 9,
+          top: 13,
+          cleft: 12.8,
           ctop: 0.15,
           name:"点位5"
         },
@@ -150,9 +150,10 @@ export default {
       this.q = 0;
       var vertices = [];
       var cacheListData = [];
+      console.log("way:",this.way);
       this.way.forEach((element, index) => {
         this.pointList.forEach(item => {
-          if (item.id == index + 1) {
+          if (item.id == element.CameraID) {
             // 点
             vertices.push({
               x: item.left *10,
