@@ -17,7 +17,7 @@
                   </div>
                   <div class="card-box detail-info">
                       <div>
-                        <header-box :img="currentData.image"></header-box>
+                        <header-box :img="`${currentData.image}?x-oss-process=image/resize,h_80,w_80,m_fixed`"></header-box>
                         <div class="detail-time">{{currentData.time | splitTime}}</div>
                       </div>
                       <div>
@@ -33,15 +33,17 @@
                           <span>最近抓拍访客</span>
                           <span>CAPTURING VISITORS</span>
                       </div>
-                      <ul class="list">
-                            <li v-for="(item,index) in listData" :key="index" v-if="index<3" @click="showPath(item)">
+                      <div class="list-wrap">
+                        <ul class="list">
+                            <li v-for="(item,index) in listData" :key="index"  @click="showPath(item)">
                                 <div class="list-item">
-                                    <div><small-header-box :img="item.image"></small-header-box></div>
+                                    <div><small-header-box :img="`${item.image}?x-oss-process=image/resize,h_50,w_50,m_fixed`"></small-header-box></div>
                                     <div>进入时间</div>
                                     <div>{{item.time | splitTime}}</div>
                                 </div>
                             </li>
                       </ul>
+                      </div>
                   </div>
                 </div>
               </div>
@@ -91,7 +93,7 @@
 
                     </div>
                     <div class="video-infos">
-                      <div class="video-infos-title">实事监控画面</div>
+                      <div class="video-infos-title">实时监控画面</div>
                     </div>
                 </div>
               </div>
@@ -116,6 +118,8 @@ export default {
   },
   data() {
     return {
+      client: Stomp.client("ws://mqtt.tq-service.com:15674/ws"),
+      timer1: null,
       wayList: [],
       currentData: {},
       sexData: { male: 0, female: 0 },
@@ -129,11 +133,13 @@ export default {
         "少年",
         "青少年",
         "青年",
-        "壮年",
+        "青年",
         "中年",
         "中老年",
         "老年"
-      ]
+      ],
+      firstMark: true,
+      clickMark: false
     };
   },
   filters: {
@@ -141,25 +147,56 @@ export default {
       return val == "1" ? "男" : "女";
     },
     splitGlass(val) {
-      return val == "1" ? "有" : "无";
+      return val == "1" ? "佩戴" : "无";
     },
     splitTime(val) {
       return val && val.split(" ")[0] ? val.split(" ")[1] : "";
     }
   },
+  created() {
+    this.connect();
+  },
   mounted() {
     let _this = this;
     _this.initDateTime();
-    var obj = {
+    const obj = {
       dt1: this.startDate,
       dt2: this.endDate
     };
-
+    const obj1 = { count: 5 };
     _this.getPedestriantype(obj);
     _this.getPedestrianCount();
-    _this.getPedestrianRealtime();
+    _this.getPedestrianRealtime(obj1, false);
+  },
+  beforeDestroy() {
+    window.clearInterval(this.timer1);
+    this.client = null;
   },
   methods: {
+    onConnected: function(frame) {
+      console.log("wxqy Connected: " + frame);
+      const topic = "/exchange/rydx"; // 人员动线订阅地址
+      this.client.subscribe(topic, this.responseCallback, this.onFailed);
+    },
+
+    onFailed: function(frame) {
+      console.log("rydx Failed: " + frame);
+    },
+
+    responseCallback: function(frame) {
+      console.log("rydx responseCallback msg=>" + frame.body);
+      // 接收消息
+      if (frame.body == "new") {
+        const param = { count: 1 };
+        this.getPedestrianRealtime(param, true);
+      }
+    },
+
+    connect: function() {
+      // 初始化mqtt客户端，并连接mqtt服务
+      this.client.connect("zhj", "zhj", this.onConnected, this.onFailed, "zhj");
+    },
+
     // 获取时间
     initDateTime() {
       let dateNow = new Date();
@@ -174,7 +211,7 @@ export default {
       var _this = this;
       var obj1 = { ...obj, count: 5 };
       _this.$api.queryPedestrianType(obj1).then(result => {
-        console.log("来访人员类型", result);
+        //console.log("来访人员类型", result);
         var cacheData = [];
         result.forEach((element, index) => {
           cacheData.push({
@@ -199,7 +236,7 @@ export default {
     getPedestrianCount(obj) {
       var obj1 = { camera: 1 };
       this.$api.queryPedestrianCount(obj1).then(result => {
-        console.log("来访人员人数", result);
+        //console.log("来访人员人数", result);
         result.forEach(element => {
           if (element.gender == 1) {
             this.sexData.male = element.num;
@@ -211,32 +248,43 @@ export default {
     },
 
     // 来访人员最近列表记录
-    getPedestrianRealtime() {
-      var obj1 = { count: 5 };
+    getPedestrianRealtime(obj1, mark) {
       var _this = this;
       _this.$api.queryPedestrianRealtime(obj1).then(result => {
-        console.log("来访人员列表", result);
-        _this.listData = result;
-        if (_this.listData.length > 0) {
-          _this.currentData = _this.listData[0];
-          _this.getUserList({ user: _this.currentData.user_id });
+        if (mark) {
+          if (result.length > 0) {
+            let cacheData = _this.listData;
+            cacheData.unshift(result[0]);
+            _this.listData = cacheData;
+          }
+        } else {
+          _this.listData = result;
+          if (_this.listData.length > 0) {
+            // 新增人员
+            if (_this.firstMark) {
+              _this.firstMark = false;
+              _this.currentData = _this.listData[0];
+              _this.getUserList({ user: _this.currentData.user_id });
+            }
+          }
         }
       });
     },
 
     // 展示动线
     showPath(item) {
+      this.clickMark = true;
       this.currentData = item;
       this.getUserList({ user: this.currentData.user_id });
     },
 
     // 查询动线
     getUserList(obj) {
-      var _this = this;
-      _this.$api.queryUserList(obj).then(result => {
-        console.log("获取人员动线", result);
-        _this.wayList = result;
-         ConsoleWrite(JSON.stringify(result));
+      this.$api.queryUserList(obj).then(result => {
+        this.wayList = result;
+        if (this.clickMark) {
+          ConsoleWrite(JSON.stringify(result));
+        }
       });
     },
 
@@ -404,7 +452,7 @@ export default {
   align-items: center;
   justify-content: center;
   flex-direction: row;
-  margin: 1.7rem 5% 0 5%;
+  margin: 1.7rem 5% 1.5% 5%;
 }
 
 .detail-info > div {
@@ -430,11 +478,13 @@ export default {
   font-family: PingFang-Regular;
   font-size: 1.5rem;
   color: #ffffff;
+  display: flex;
+  align-items: center;
 }
 
 .detail-item > span:nth-of-type(2) {
   /*  font-family: Din; */
-  font-size: 2.2rem;
+  font-size: 2rem;
   color: #009eff;
   display: inline-block;
 }
@@ -446,7 +496,7 @@ export default {
 }
 
 .detail-item > span:nth-of-type(1)::after {
-  content: "AGE";
+  content: "";
   font-family: PingFang-Regular;
   font-size: 0.6rem;
   color: #ececec;
@@ -460,6 +510,7 @@ export default {
   line-height: 1.5rem;
 }
 
+/* 
 .detail-item:nth-of-type(2) > span:nth-of-type(1)::after {
   content: "GWNDER";
 }
@@ -467,7 +518,7 @@ export default {
 .detail-item:nth-of-type(3) > span:nth-of-type(1)::after {
   content: "GLASSES";
 }
-
+ */
 .card-bar {
   border-bottom: 1px solid rgba(255, 255, 255, 0.07);
   padding: 1.5rem 0;
@@ -495,7 +546,15 @@ export default {
   margin: 1.7rem 5% 0 5%;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
-  height: 36rem;
+  height: 37rem;
+  overflow: hidden;
+}
+
+.list-wrap {
+  width: 105%;
+  height: 26rem;
+  overflow-x: hidden;
+  overflow-y: scroll;
 }
 
 .list {
@@ -723,16 +782,16 @@ export default {
   text-align: center;
 }
 
-.title>img{
+.title > img {
   width: 124.2rem;
   height: auto;
 }
 
-@media screen and (min-width:3739px){
-  .title>img{
-  width: 100rem;
-  height: auto;
-}
+@media screen and (min-width: 3739px) {
+  .title > img {
+    width: 100rem;
+    height: auto;
+  }
 }
 
 .circle-box-small {
@@ -805,31 +864,31 @@ export default {
   margin-left: 1%;
 }
 
-.video-groups{
-  width:84%;
+.video-groups {
+  width: 84%;
   height: 100%;
   float: left;
 }
 
-.video-infos{
-  width:16%;
+.video-infos {
+  width: 16%;
   height: 100%;
   margin-left: 0%;
   float: left;
-  background: rgba(49,77,128,0.32);
+  background: rgba(36, 46, 65, 0.5);
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.video-infos-title{
+.video-infos-title {
   width: 14.5rem;
   height: 4.6rem;
   background: url(../assets/imgs/line3.png) no-repeat center;
   background-size: 100% 100%;
   font-family: PingFang-Regular;
   font-size: 2.1rem;
-  color:#ffffff;
+  color: #ffffff;
   text-align: center;
   line-height: 4.6rem;
 }

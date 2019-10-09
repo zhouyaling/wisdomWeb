@@ -13,12 +13,12 @@
             <div class="header-infos" v-show="currentFloor==1">
               <div class="header-card"  v-for="(item,index) in headerListCacheData" :key="index" v-bind:class="'m'+ (index+1)" v-bind:style="`top:${item.ctop}rem;left:${item.cleft}rem;`">
                 <div class="shadow"></div>
-                <div class="header"><img v-bind:src="item.image" alt=""></div>
+                <div class="header"><img v-bind:src="`${item.image}?x-oss-process=image/resize,h_60,w_60,m_fixed`" alt=""></div>
                 <div class="header-text">
                   <p>{{item.time | splitDate}}</p>
                   <p>{{item.time | splitTime}}</p>
                   <!-- <p>停留时长:2分钟</p> -->
-                  <p>{{item.pointName}}</p>
+                 <!--  <p>{{item.pointName}}</p> -->
                 </div>
               </div>
             </div>
@@ -58,10 +58,10 @@ export default {
         },
         {
           id: 2,
-          left: 26,
+          left: 23,
           top: 40.1,
           cleft: 27,
-          ctop: 40,
+          ctop: 35,
           name:"点位2"
         },
          {
@@ -91,7 +91,7 @@ export default {
         },
         {
           id:5,
-          left: 9,
+          left: 5,
           top: 13,
           cleft: 12.8,
           ctop: 0.15,
@@ -423,7 +423,7 @@ export default {
   color: #ffffff;
   text-align: center;
   margin: 0.1rem;
-  letter-spacing: 0.2rem;
+  letter-spacing: 0.1rem;
 }
 
 .header-card > div p:nth-of-type(3) {

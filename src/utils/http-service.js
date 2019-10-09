@@ -65,7 +65,6 @@ export function get(url, params = {}) {
         var data = { params: params };
         axios.get(url, data)
             .then(response => {
-                console.log("response:", response);
                 if (response.status == 200) {
                     resolve(response.data);
                 } else {

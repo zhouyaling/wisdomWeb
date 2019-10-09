@@ -31,22 +31,12 @@
                          <div class="alarm-item" v-for="(item,index) in listData" :key="index" @click="showDatail(item)">
                              <div>
                                  <div class="header-box">
-                                     <img  v-bind:src="item.image" alt="">
+                                     <img  v-bind:src="`${item.img}?x-oss-process=image/resize,h_100,w_100,m_fixed`" alt="">
                                  </div>
                              </div>
                              <div>{{item.time | splitDate}}</div>
                              <div>{{item.time | splitTime}}</div>
-                             <div>A区5栋园林通道{{index}}</div>
-                         </div>
-                         <div class="alarm-item" v-for="(item,index) in listData" :key="index+111" @click="showDatail(item)">
-                             <div>
-                                 <div class="header-box">
-                                     <img  v-bind:src="item.image" alt="">
-                                 </div>
-                             </div>
-                             <div>{{item.time | splitDate}}</div>
-                             <div>{{item.time | splitTime}}</div>
-                             <div>A区5栋园林通道{{index}}</div>
+                             <div>大厅危险区域</div>
                          </div>
                      </div>
                   </div>
@@ -78,7 +68,9 @@
 </template>
 <script>
 import _axios from "axios";
+import Stomp from "stompjs";
 
+import apiConfig from "../../config/api.config";
 import IndexLayout from "@/components/IndexLayout.vue";
 import TitleBar from "@/components/TitleBar.vue";
 import AlarmDetail from "@/components/AlarmDetail.vue";
@@ -94,6 +86,7 @@ export default {
   },
   data() {
     return {
+      client: Stomp.client("ws://mqtt.tq-service.com:15674/ws"),
       alramInfo: {}, // 报警详情
       listData: [], //报警信息列表数据
       activeIndex: 0, // 当前滚动数据
@@ -101,7 +94,8 @@ export default {
       showPanel: false, // 显示弹窗
       showHeaderPanel: false, // 显示头像弹窗
       showBlur: false, // 高斯模糊
-      timer1: null
+      timer1: null,
+      timer2: null
     };
   },
   filters: {
@@ -112,6 +106,9 @@ export default {
       return val && val.split(" ")[0] ? val.split(" ")[1] : "";
     }
   },
+  created() {
+    this.connect();
+  },
   computed: {
     top() {
       return -this.activeIndex * 13.1 + "rem";
@@ -119,11 +116,37 @@ export default {
   },
   beforeDestroy() {
     window.clearInterval(this.timer1);
+    window.clearInterval(this.timer2);
+    this.client = null;
   },
   mounted() {
-    this.getListData();
+    this.getListData({ camera: 1, count: 6 }, false);
   },
   methods: {
+    onConnected: function(frame) {
+      //console.log("wxqy Connected: " + frame);
+      const topic = "/exchange/wxqy"; // 危险区域订阅地址
+      this.client.subscribe(topic, this.responseCallback, this.onFailed);
+    },
+
+    onFailed: function(frame) {
+      //console.log("wxqy Failed: " + frame);
+    },
+
+    responseCallback: function(frame) {
+      //console.log("wxqy responseCallback msg=>" + frame.body);
+      // 接收消息
+      if (frame.body == "new") {
+        this.getListData({ camera: 1, count: 1 }, true);
+        
+      }
+    },
+
+    connect: function() {
+      // 初始化mqtt客户端，并连接mqtt服务
+      this.client.connect("zhj", "zhj", this.onConnected, this.onFailed, "zhj");
+    },
+
     // 点击头像
     headerClick() {
       this.showBlur = true;
@@ -143,31 +166,28 @@ export default {
     // 详情
     showDatail(item) {
       this.alramInfo = item;
-       ConsoleWrite(JSON.stringify(item));
+      ConsoleWrite(JSON.stringify(item));
     },
 
     // 获取历史列表
-    getListData() {
+    getListData(data, mark) {
       var _this = this;
-      _this.listData = [];
-      var data = { camera: 1, count: 1 };
       this.$api.queryDangerousList(data).then(result => {
-        console.log("历史区域报警列表：", result);
-        _this.listData = result;
-        if (_this.listData.length > 0) {
-          _this.alramInfo = _this.listData[0];
+        if (mark) {
+          if (result.length > 0) {
+            let cacheData = _this.listData;
+            cacheData.unshift(result[0]);
+            _this.listData = cacheData;
+            _this.alramInfo = result[0];
+            ConsoleWriteTK(JSON.stringify(result[0]));
+          }
+        } else {
+          _this.listData = result;
+          if (_this.listData.length > 0) {
+            _this.alramInfo = _this.listData[0];
+          }
         }
-        _this.ScrollUp2();
       });
-
-      /*   _axios
-        .get(
-          "http://10.15.208.119/api/Face/GetDangerousPedestrianRealtime?camera=1&count=1"
-        )
-        .then(response => {
-          console.log("tttttttttttttt", response);
-        })
-        .catch(function(error) {}); */
     },
 
     // 向上滚动
@@ -183,15 +203,6 @@ export default {
         }
       }, 8000);
     }
-    /*  getTest() {
-      const data = qs.stringify({
-        camera: "1",
-        count: "2"
-      });
-
-      this.$api.getTest(data).then(result => {
-      });
-    } */
   }
 };
 </script>
@@ -207,6 +218,7 @@ export default {
   float: left;
   height: 100%;
   margin-left: 2%;
+  overflow: hidden;
 }
 
 .video-box {
@@ -285,11 +297,12 @@ export default {
 
 /* 历史报警信息 */
 .alarm-list-box {
-  width: 100%;
+  width: 103%;
   height: 90%;
   /* background: rgba(0, 0, 0, 0.23); */
   margin-top: 2rem;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: scroll;
   position: relative;
 }
 
@@ -338,10 +351,34 @@ export default {
 
 .alarm-item > div:nth-of-type(2) {
   letter-spacing: 0.2rem;
+  position: relative;
+}
+
+.alarm-item > div:nth-of-type(2)::after {
+  content: "";
+  width: 0.12rem;
+  height: 4rem;
+  background: linear-gradient(rgba(255,255,255,0) 0% ,rgba(255,255,255,0.8) 50%,rgba(255,255,255,0) 100%);
+  border-radius: 1rem;
+  position: absolute;
+  right: 0;
+  top:-0.5rem;
 }
 
 .alarm-item > div:nth-of-type(3) {
   letter-spacing: 0.2rem;
+  position: relative;
+}
+
+.alarm-item > div:nth-of-type(3)::after {
+  content: "";
+  width: 0.12rem;
+  height: 4rem;
+  background: linear-gradient(rgba(255,255,255,0) 0% ,rgba(255,255,255,0.8) 50%,rgba(255,255,255,0) 100%);
+  border-radius: 1rem;
+  position: absolute;
+  right: 0;
+  top:-0.5rem;
 }
 
 .alarm-item .header-box {

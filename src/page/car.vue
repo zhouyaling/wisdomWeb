@@ -45,7 +45,7 @@
                                 <div class="progress" v-bind:style="`width:${item.Percentage.replace('%','')}%`"></div>
                               </div>
                               <span>{{item.Percentage}}</span>
-                              <span>--辆</span>
+                              <span>{{item.num}} 辆</span>
                       </div>
                       <div class="table-item"  v-for="(item,index) in carColorList" :key="index+111">
                          <span>{{item.carColor}}</span>
@@ -53,7 +53,7 @@
                                 <div class="progress" v-bind:style="`width:${item.Percentage.replace('%','')}%`"></div>
                               </div>
                               <span>{{item.Percentage}}</span>
-                              <span>--辆</span>
+                              <span>{{item.num}} 辆</span>
                       </div>
                       </div>
                       
@@ -71,7 +71,7 @@
               <div class="col-33">
                 <div class="image-groups">
                   <div><img v-bind:src="carInfoList.length>0?carInfoList[0].carImg:''"/></div>
-                  <div><img v-bind:src="carInfoList.length>0?carInfoList[0].carImg:''"/></div>
+                  <div><img v-bind:src="carInfoList.length>0?carInfoList[0].faceImg:''"/></div>
                 </div>
                 <div class="new-car-box">
                   <title-bar style="margin:2.2rem 0" title="车流统计" subText="VEHICLE FLOW"></title-bar>
@@ -87,7 +87,7 @@
                             <div class="car-info-box">
                                 <div class="info-title-bar">
                                     <span>车牌号</span>
-                                    <span>出入口位置</span>
+                                    <span>中心位置</span>
                                     <span>出入场时间</span>
                                     <span>状态</span>
                                 </div>
@@ -95,15 +95,15 @@
                                     <div class="list-box" v-bind:class="resetAnimation?'reset-animation':''" :style="{top}">
                                       <div class="info-detail-item" v-for="(item,index) in carInfoList" :key="index">
                                         <span>{{item.carNum}}</span>
-                                          <span>--</span>
+                                          <span>车辆道闸</span>
                                           <span>{{item.time}}</span>
-                                          <span>{{item.InOut==1?"正常出场":"正常入场"}}</span>
+                                          <span>{{item.InOut==1?"正常入场":"正常出场"}}</span>
                                       </div>
                                       <div class="info-detail-item" v-for="(item,index) in carInfoList" :key="index+111">
                                           <span>{{item.carNum}}</span>
-                                          <span>--</span>
+                                          <span>车辆道闸</span>
                                           <span>{{item.time}}</span>
-                                          <span>{{item.InOut==1?"正常出场":"正常入场"}}</span>
+                                          <span>{{item.InOut==1?"正常入场":"正常出场"}}</span>
                                       </div>
                                     </div>
                                 </div>
@@ -124,7 +124,7 @@
                             <div class="car-info-box">
                                 <div class="info-title-bar">
                                     <span>车牌号</span>
-                                    <span>出入口位置</span>
+                                    <span>中心位置</span>
                                     <span>出入场时间</span>
                                     <span>状态</span>
                                 </div>
@@ -202,6 +202,8 @@ export default {
   },
   data() {
     return {
+      timer1: null,
+      timer2: null,
       todayCarInfoXData: [
         "0",
         "2",
@@ -293,10 +295,23 @@ export default {
     this.getCarType(obj);
     this.getCarColor(obj);
     this.getCarListRealtime(obj);
+    this.ScrollUp2();
     this.getCarSUMbyHou();
-    this.getCarSUMbyDay();
+    //this.getCarSUMbyDay();
+    this.timer1 = window.setInterval(() => {
+      this.getCarListRealtime(obj);
+    }, 3000);
+    this.timer2 = window.setInterval(() => {
+      this.getCarBrand(obj);
+      this.getCarType(obj);
+      this.getCarColor(obj);
+      this.getCarSUMbyHou();
+    }, 600000); // 10分钟
   },
-
+  beforeDestroy() {
+    window.clearInterval(this.timer1);
+    window.clearInterval(this.timer2);
+  },
   methods: {
     // 获取时间
     initDateTime() {
@@ -310,7 +325,7 @@ export default {
     getCarBrand(obj) {
       var obj1 = { ...obj, count: 5 };
       this.$api.queryCarBrand(obj1).then(result => {
-        console.log("车辆品牌", result);
+        //console.log("车辆品牌", result);
         this.brandList = result;
       });
     },
@@ -318,7 +333,7 @@ export default {
     getCarType(obj) {
       var obj1 = { ...obj, count: 5 };
       this.$api.queryCarType(obj1).then(result => {
-        console.log("车辆类型", result);
+        //console.log("车辆类型", result);
         this.carTypeList = result;
       });
     },
@@ -326,7 +341,7 @@ export default {
     getCarColor(obj) {
       var obj1 = { ...obj, count: 10 };
       this.$api.queryCarColor(obj1).then(result => {
-        console.log("车辆颜色", result);
+        //console.log("车辆颜色", result);
         this.carColorList = result;
         this.ScrollUp2Color();
       });
@@ -334,16 +349,15 @@ export default {
     // 车辆进出记录
     getCarListRealtime() {
       this.$api.queryCarListRealtime({ count: 5 }).then(result => {
-        console.log("车辆进出记录", result);
+        //console.log("车辆进出记录", result);
         this.carInfoList = result;
-        this.ScrollUp2();
       });
     },
 
     // 今日车流量
     getCarSUMbyHou() {
       this.$api.queryCarSUMbyHou({}).then(result => {
-        console.log("今日车流量", result);
+        //console.log("今日车流量", result);
         this.todayCarInfoXData = [];
         this.todayCarInfoYData = [];
         var xData = [];
@@ -361,7 +375,7 @@ export default {
     // 当月车流量
     getCarSUMbyDay() {
       this.$api.queryCarSUMbyDay({}).then(result => {
-        console.log("当月车流量", result);
+        //console.log("当月车流量", result);
         this.monthCarInfoXData = [];
         this.monthCarInfoYData = [];
         var xData = [];
@@ -410,7 +424,7 @@ export default {
 .col-25 {
   width: 25.6%;
   float: left;
-  margin-top:4rem;
+  margin-top: 4rem;
 }
 
 .col-50 {
@@ -773,9 +787,17 @@ export default {
   display: block;
   text-align: center;
   font-family: PingFang-Regular;
-font-size: 1.4rem;
-color: #3F88FF;
-letter-spacing: 0;
+  font-size: 1.4rem;
+  color: #3f88ff;
+  letter-spacing: 0;
+}
+
+.info-title-bar > span:nth-of-type(2) {
+  width: 22%;
+}
+
+.info-title-bar > span:nth-of-type(3) {
+  width: 28%;
 }
 
 .info-detail-box {
@@ -824,12 +846,12 @@ letter-spacing: 0;
   /*line-height: 1.5rem;*/
 }
 
-.info-detail-item>span:nth-of-type(4){
+.info-detail-item > span:nth-of-type(4) {
   font-family: PingFang-Regular;
-font-size: 1.3rem;
-color: #00FF92;
-letter-spacing: 0;
-text-align: center;
+  font-size: 1.3rem;
+  color: #00ff92;
+  letter-spacing: 0;
+  text-align: center;
 }
 
 .title {
@@ -842,14 +864,14 @@ text-align: center;
   background-size: auto 95%;
 }
 
-@media screen and (min-width:3739px){
-  .title{
+@media screen and (min-width: 3739px) {
+  .title {
     position: absolute;
     top: -8rem;
-    left:8%;
+    left: 8%;
     width: 80%;
     height: 6.6rem;
-     background-size:100% auto;
+    background-size: 100% auto;
   }
 }
 
@@ -892,23 +914,22 @@ text-align: center;
   }
 }
 
-.col-41{
+.col-41 {
   width: 41%;
   height: 100%;
   float: left;
-  margin-top:4rem;
+  margin-top: 4rem;
 }
 
-.col-33{
+.col-33 {
   width: 33%;
   height: 100%;
   float: left;
-  margin-top:4rem;
+  margin-top: 4rem;
 }
 
-.image-groups
-{
-  width:100%;
+.image-groups {
+  width: 100%;
   height: 17.3rem;
   display: flex;
   align-items: center;
@@ -916,55 +937,54 @@ text-align: center;
   flex-direction: row;
 }
 
-.image-groups>div{
-  width:48%;
+.image-groups > div {
+  width: 48%;
   height: 100%;
-  background: #1B213A;
-border: 1px solid #50A8FF;
-border-radius: 1.4rem;
+  background: #1b213a;
+  border: 1px solid #50a8ff;
+  border-radius: 1.4rem;
 }
 
-.image-groups>div img{
-  width:95%;
-  height:95%;
+.image-groups > div img {
+  width: 95%;
+  height: 95%;
   border-radius: 1.4rem;
   margin-top: 2.5%;
   margin-left: 2.5%;
 }
 
-.new-car-box{
-  width: 100%;
-  
-}
-
-.carlist-box{
+.new-car-box {
   width: 100%;
 }
 
-.car-info-box{
+.carlist-box {
+  width: 100%;
+}
+
+.car-info-box {
   width: 100%;
   height: 24.5rem;
   background: url(../assets/imgs/carlist-box.png) no-repeat center;
   background-size: 100% 100%;
 }
 
-.sub-title{
-  width:100%;
-  height:2.4rem;
+.sub-title {
+  width: 100%;
+  height: 2.4rem;
   background: url(../assets/imgs/line4.png) no-repeat center;
   background-size: 100% 100%;
   position: absolute;
   left: 0;
-  top:-0.3rem;
+  top: -0.3rem;
 }
 
-.sub-title>span{
-font-family: din;
-font-size: 1.6rem;
-color: #ffffff;
-letter-spacing: 1.04px;
-line-height: 2.4rem;
-padding-left: 5rem;
+.sub-title > span {
+  font-family: din;
+  font-size: 1.6rem;
+  color: #ffffff;
+  letter-spacing: 1.04px;
+  line-height: 2.4rem;
+  padding-left: 5rem;
 }
 </style>
 

@@ -1,7 +1,7 @@
 <template>
     <div class="alarm-info-box">
         <div class="alarm-img">
-            <img v-bind:src="info.image?info.image:''" alt="">
+            <img v-bind:src="info.img?info.img:''" alt="">
         </div>
         <div class="alarm-info">
             <div>
@@ -10,11 +10,11 @@
             </div>
             <div>
                 <span>报警设备:</span>
-                <span>摄像头1</span>
+                <span>危险区域摄像头</span>
             </div>
             <div>
                 <span>报警地点:</span>
-                <span>A区5栋园林通道</span>
+                <span>大厅危险区域</span>
             </div>
             <div>
                 <span>报警时间:</span>
