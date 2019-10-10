@@ -140,7 +140,7 @@ export default {
         cacheData.unshift(oneData);
         this.listData = cacheData;
         this.alramInfo = oneData;
-        ConsoleWriteTK(this.alramInfo);
+        ConsoleWriteTK(JSON.stringify(this.alramInfo));
       }
     },
 
