@@ -164,8 +164,8 @@ export default {
       dt2: this.endDate
     };
     const obj1 = { count: 5 };
-    _this.getPedestriantype(obj);
-    _this.getPedestrianCount();
+    //_this.getPedestriantype(obj);
+    //_this.getPedestrianCount();
     _this.getPedestrianRealtime(obj1, false);
   },
   beforeDestroy() {
@@ -174,22 +174,25 @@ export default {
   },
   methods: {
     onConnected: function(frame) {
-      console.log("wxqy Connected: " + frame);
+      //console.log("wxqy Connected: " + frame);
       const topic = "/exchange/rydx"; // 人员动线订阅地址
       this.client.subscribe(topic, this.responseCallback, this.onFailed);
     },
 
     onFailed: function(frame) {
-      console.log("rydx Failed: " + frame);
+      //console.log("rydx Failed: " + frame);
     },
 
     responseCallback: function(frame) {
-      console.log("rydx responseCallback msg=>" + frame.body);
+      //console.log("rydx responseCallback msg=>" + frame.body);
       // 接收消息
-      if (frame.body == "new") {
-        const param = { count: 1 };
-        this.getPedestrianRealtime(param, true);
+      if (frame.body) {
+        const oneData = JSON.parse(frame.body);
+        let cacheData = this.listData;
+        cacheData.unshift(oneData);
+        this.listData = cacheData;
       }
+      
     },
 
     connect: function() {
@@ -234,7 +237,7 @@ export default {
 
     // 获取来访人员总数
     getPedestrianCount(obj) {
-      var obj1 = { camera: 1 };
+      let obj1 = { camera: 1 };
       this.$api.queryPedestrianCount(obj1).then(result => {
         //console.log("来访人员人数", result);
         result.forEach(element => {
@@ -249,23 +252,15 @@ export default {
 
     // 来访人员最近列表记录
     getPedestrianRealtime(obj1, mark) {
-      var _this = this;
+      let _this = this;
       _this.$api.queryPedestrianRealtime(obj1).then(result => {
-        if (mark) {
-          if (result.length > 0) {
-            let cacheData = _this.listData;
-            cacheData.unshift(result[0]);
-            _this.listData = cacheData;
-          }
-        } else {
-          _this.listData = result;
-          if (_this.listData.length > 0) {
-            // 新增人员
-            if (_this.firstMark) {
-              _this.firstMark = false;
-              _this.currentData = _this.listData[0];
-              _this.getUserList({ user: _this.currentData.user_id });
-            }
+        _this.listData = result;
+        if (_this.listData.length > 0) {
+          // 新增人员
+          if (_this.firstMark) {
+            _this.firstMark = false;
+            _this.currentData = _this.listData[0];
+            _this.getUserList({ user: _this.currentData.user_id });
           }
         }
       });

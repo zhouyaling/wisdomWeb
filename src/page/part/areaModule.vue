@@ -12,13 +12,14 @@
             <!-- 头像信息区域 -->
             <div class="header-infos" v-show="currentFloor==1">
               <div class="header-card"  v-for="(item,index) in headerListCacheData" :key="index" v-bind:class="'m'+ (index+1)" v-bind:style="`top:${item.ctop}rem;left:${item.cleft}rem;`">
+                <div class="shadow1"></div>
                 <div class="shadow"></div>
                 <div class="header"><img v-bind:src="`${item.image}?x-oss-process=image/resize,h_60,w_60,m_fixed`" alt=""></div>
                 <div class="header-text">
                   <p>{{item.time | splitDate}}</p>
                   <p>{{item.time | splitTime}}</p>
                   <!-- <p>停留时长:2分钟</p> -->
-                 <!--  <p>{{item.pointName}}</p> -->
+                  <p>{{item.pointName}}</p>
                 </div>
               </div>
             </div>
@@ -49,28 +50,28 @@ export default {
       pointList: [
        
         {
-          id: 1,
+          id: 4,
           left: 46.4,
           top: 19.6,
           cleft: 44,
           ctop: 21.8,
-          name:"点位1"
+          name:"入场通道"
         },
         {
-          id: 2,
+          id: 8,
           left: 23,
           top: 40.1,
           cleft: 27,
           ctop: 35,
-          name:"点位2"
+          name:"竹林小道"
         },
          {
-          id: 3,
+          id: 2,
           left: 2,
           top: 24.5,
           cleft:-1.5,
           ctop: 30,
-          name:"点位3"
+          name:"二楼通道"
         },
        /* {
           id: 4,
@@ -81,13 +82,13 @@ export default {
           name:"点位4"
         },*/
          {
-          id: 4,
+          id: 3,
           left: 4.1,
           top: 19.9,
           /*rotate: 281,*/
           cleft:9.2,
           ctop: 16,
-          name:"点位4"
+          name:"楼梯口"
         },
         {
           id:5,
@@ -95,7 +96,7 @@ export default {
           top: 13,
           cleft: 12.8,
           ctop: 0.15,
-          name:"点位5"
+          name:"沙盘区域"
         },
        
       ],
@@ -128,6 +129,16 @@ export default {
   methods: {
     // 展示动线
     showWay() {
+      // 清空动线和点以及头像
+      this.points = [];
+       var canvas = this.$refs.myCanvas;
+      this.ctx = canvas.getContext("2d");
+      canvas.width = 1062 * 1;
+      canvas.height = 406 * 1;
+      this.ctx.beginPath();
+      this.ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      this.headerListCacheData = [];
       if (this.way.length > 0) {
         this.drawLine();
       }
@@ -150,7 +161,7 @@ export default {
       this.q = 0;
       var vertices = [];
       var cacheListData = [];
-      console.log("way:",this.way);
+      //console.log("way:",this.way);
       this.way.forEach((element, index) => {
         this.pointList.forEach(item => {
           if (item.id == element.CameraID) {
@@ -379,9 +390,9 @@ export default {
 .header-card {
   width: 16.8rem;
   height: 11rem;
-  background-color: rgba(20,28,42,0.5);
+  /* background-color: rgba(20,28,42,1);
   background-image: url(../../assets/imgs/info-box1.png);
-  background-repeat: no-repeat;
+  background-repeat: no-repeat; */
   background-size: 100%;
   position: absolute;
   left: 40%;
@@ -391,12 +402,24 @@ export default {
 
 .header-card .shadow {
   width: 16.5rem;
-  height: 10.4rem;
+  height: 10.5rem;
   background: url(../../assets/imgs/info-box.png) no-repeat 0;
   background-size: 100%;
   position: absolute;
   top: 2px;
   left: 2px;
+  /* filter: blur(2px); */
+}
+
+.header-card .shadow1 {
+  width: 16.7rem;
+  height: 10.7rem;
+  background: url(../../assets/imgs/info-box1.png) no-repeat 0;
+  background-size: 100%;
+  position: absolute;
+  top: 1px;
+  left: 1px;
+/*   filter: blur(2px); */
 }
 
 .header-card .header {
@@ -419,21 +442,23 @@ export default {
 
 .header-card > div p {
   font-family: Din;
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   color: #ffffff;
   text-align: center;
-  margin: 0.1rem;
+  margin: 0.2rem;
   letter-spacing: 0.1rem;
 }
 
 .header-card > div p:nth-of-type(3) {
   font-family: PingFang-Regular;
-  font-size: 1rem;
+  font-size: 1.2rem;
+  margin-top: 0.5rem;
   color: #0098f5;
 }
 
 .header-text {
   margin-top: 4rem;
+  position: relative;
 }
 
   .floor-img1{

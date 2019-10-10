@@ -75,8 +75,6 @@ import IndexLayout from "@/components/IndexLayout.vue";
 import TitleBar from "@/components/TitleBar.vue";
 import AlarmDetail from "@/components/AlarmDetail.vue";
 
-var qs = require("querystring");
-
 export default {
   name: "alarm",
   components: {
@@ -136,9 +134,13 @@ export default {
     responseCallback: function(frame) {
       //console.log("wxqy responseCallback msg=>" + frame.body);
       // 接收消息
-      if (frame.body == "new") {
-        this.getListData({ camera: 1, count: 1 }, true);
-        
+      if (frame.body) {
+         const oneData = JSON.parse(frame.body);
+        let cacheData = this.listData;
+        cacheData.unshift(oneData);
+        this.listData = cacheData;
+        this.alramInfo = oneData;
+        ConsoleWriteTK(this.alramInfo);
       }
     },
 
@@ -171,21 +173,11 @@ export default {
 
     // 获取历史列表
     getListData(data, mark) {
-      var _this = this;
+      let _this = this;
       this.$api.queryDangerousList(data).then(result => {
-        if (mark) {
-          if (result.length > 0) {
-            let cacheData = _this.listData;
-            cacheData.unshift(result[0]);
-            _this.listData = cacheData;
-            _this.alramInfo = result[0];
-            ConsoleWriteTK(JSON.stringify(result[0]));
-          }
-        } else {
-          _this.listData = result;
-          if (_this.listData.length > 0) {
-            _this.alramInfo = _this.listData[0];
-          }
+        _this.listData = result;
+        if (_this.listData.length > 0) {
+          _this.alramInfo = _this.listData[0];
         }
       });
     },
@@ -358,11 +350,15 @@ export default {
   content: "";
   width: 0.12rem;
   height: 4rem;
-  background: linear-gradient(rgba(255,255,255,0) 0% ,rgba(255,255,255,0.8) 50%,rgba(255,255,255,0) 100%);
+  background: linear-gradient(
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.8) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
   border-radius: 1rem;
   position: absolute;
   right: 0;
-  top:-0.5rem;
+  top: -0.5rem;
 }
 
 .alarm-item > div:nth-of-type(3) {
@@ -374,11 +370,15 @@ export default {
   content: "";
   width: 0.12rem;
   height: 4rem;
-  background: linear-gradient(rgba(255,255,255,0) 0% ,rgba(255,255,255,0.8) 50%,rgba(255,255,255,0) 100%);
+  background: linear-gradient(
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.8) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
   border-radius: 1rem;
   position: absolute;
   right: 0;
-  top:-0.5rem;
+  top: -0.5rem;
 }
 
 .alarm-item .header-box {
