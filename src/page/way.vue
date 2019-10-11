@@ -34,9 +34,9 @@
                           <span>CAPTURING VISITORS</span>
                       </div>
                       <div class="list-wrap">
-                        <ul class="list">
+                        <ul class="list"> <!-- v-bind:class="item.group_id!='02421BE35C0D418FB20D559E92B671AB'?'gray':''" -->
                             <li v-for="(item,index) in listData" :key="index"  @click="showPath(item)">
-                                <div class="list-item">
+                                <div class="list-item" >
                                     <div><small-header-box :img="`${item.image}?x-oss-process=image/resize,h_50,w_50,m_fixed`"></small-header-box></div>
                                     <div>进入时间</div>
                                     <div>{{item.time | splitTime}}</div>
@@ -192,7 +192,6 @@ export default {
         cacheData.unshift(oneData);
         this.listData = cacheData;
       }
-      
     },
 
     connect: function() {
@@ -260,7 +259,11 @@ export default {
           if (_this.firstMark) {
             _this.firstMark = false;
             _this.currentData = _this.listData[0];
+
             _this.getUserList({ user: _this.currentData.user_id });
+            /* if (_this.currentData.group_id == "02421BE35C0D418FB20D559E92B671AB") {
+              _this.getUserList({ user: _this.currentData.user_id });
+            } */
           }
         }
       });
@@ -268,6 +271,9 @@ export default {
 
     // 展示动线
     showPath(item) {
+     /*  if (item.group_id != "02421BE35C0D418FB20D559E92B671AB") {
+        return;
+      } */
       this.clickMark = true;
       this.currentData = item;
       this.getUserList({ user: this.currentData.user_id });
@@ -570,6 +576,10 @@ export default {
   flex-direction: row;
   padding: 1.5rem 0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.list-item.gray {
+  opacity: 0.3;
 }
 
 .list-item > div {

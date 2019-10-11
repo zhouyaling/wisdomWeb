@@ -294,6 +294,7 @@ export default {
     this.getCarBrand(obj);
     this.getCarType(obj);
     this.getCarColor(obj);
+    this.ScrollUp2Color();
     this.getCarListRealtime(obj);
     this.ScrollUp2();
     this.getCarSUMbyHou();
@@ -342,8 +343,9 @@ export default {
       var obj1 = { ...obj, count: 10 };
       this.$api.queryCarColor(obj1).then(result => {
         //console.log("车辆颜色", result);
-        this.carColorList = result;
-        this.ScrollUp2Color();
+        if (result.length > 0) {
+          this.carColorList = result;
+        }
       });
     },
     // 车辆进出记录
@@ -887,6 +889,8 @@ export default {
 
 .car-color-box1 > div {
   position: relative;
+    transition: top 0.7s;
+  -webkit-transition: top 0.7s;
 }
 
 .line-box {
